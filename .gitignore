@@ -1,3 +1,6 @@
 BApp/obj/
+BApp/bin/
 BLib/obj/
+BLib/bin/
 BTest/obj/
+BTest/bin/
