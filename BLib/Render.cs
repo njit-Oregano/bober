@@ -47,6 +47,7 @@ public class Render
             .AddItem("Water", 100, Color.Blue)
             .AddItem("Food", 100, Color.SandyBrown)
             .WithMaxValue(100);
+        LeftTopLeft.Update(Stats);
     }
 
     private void RefreshSections() {
@@ -84,5 +85,28 @@ public class Render
             LeftBottom.Update(new Panel(Align.Center(image, VerticalAlignment.Middle)).Border(BoxBorder.None));
         }
         DataToRefresh = new HashSet<RenderSections>();
+    }
+
+    public void StartRender() {
+        if (DataToRefresh == null) {
+            RefreshSections();
+        }
+        AnsiConsole.Live(Root).StartAsync(async ctx =>
+        {
+            while (true)
+            {
+                await Task.Delay(100);
+                RefreshSections();
+                ctx.Refresh();
+            }
+        });
+        while (true)
+        {
+            var key = Console.ReadKey(true);
+            if (key.Key == ConsoleKey.Escape)
+            {
+                break;
+            }
+        }
     }
 }
