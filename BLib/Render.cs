@@ -48,4 +48,41 @@ public class Render
             .AddItem("Food", 100, Color.SandyBrown)
             .WithMaxValue(100);
     }
+
+    private void RefreshSections() {
+        if (DataToRefresh == null) {
+            Init();
+        } else {
+            bool reAddBarChart = false;
+            if (DataToRefresh.Contains(RenderSections.Health)) {
+                Stats.Data[0] = new BarChartItem("Health", Character.Health, Color.Green);
+                reAddBarChart = true;
+            }
+            if (DataToRefresh.Contains(RenderSections.Water)) {
+                Stats.Data[1] = new BarChartItem("Water", Character.Water, Color.Blue);
+                reAddBarChart = true;
+            }
+            if (DataToRefresh.Contains(RenderSections.Food)) {
+                Stats.Data[2] = new BarChartItem("Food", Character.Food, Color.SandyBrown);
+                reAddBarChart = true;
+            }
+            if (reAddBarChart) {
+                LeftTopLeft.Update(Stats);
+            }
+        }
+        if (DataToRefresh == null || DataToRefresh.Contains(RenderSections.Money)) {
+            var coin = Align.Right(new Panel(new Text(Character.Money == 0 ? " NONE " : $" ${Character.Money} "))
+                .Header("[yellow]Money[/]")
+                .HeaderAlignment(Justify.Center)
+                .BorderColor(Color.Yellow)
+                .Border(BoxBorder.Rounded));
+            LeftTopRight.Update(coin);
+        }
+        if (DataToRefresh == null || DataToRefresh.Contains(RenderSections.Image)) {
+            var image = new CanvasImage(Character.Image);
+            image.MaxWidth(Console.WindowHeight - 4);
+            LeftBottom.Update(new Panel(Align.Center(image, VerticalAlignment.Middle)).Border(BoxBorder.None));
+        }
+        DataToRefresh = new HashSet<RenderSections>();
+    }
 }
