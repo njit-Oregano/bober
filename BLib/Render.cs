@@ -7,15 +7,15 @@ public class Render
     private HashSet<RenderSections>? DataToRefresh;
     private int[] TerminalSize = new int[2];
     private const int bottomPadding = 4;
-    private Table MainTable;
-    private Layout LeftTopLeft;
-    private Layout LeftTopRight;
-    private Layout LeftBottom;
-    private Layout LeftTop;
-    private Layout Left;
-    private Layout Right;
-    private Layout Root;
-    private BarChart Stats;
+    private Table? MainTable;
+    private Layout? LeftTopLeft;
+    private Layout? LeftTopRight;
+    private Layout? LeftBottom;
+    private Layout? LeftTop;
+    private Layout? Left;
+    private Layout? Right;
+    private Layout? Root;
+    private BarChart? Stats;
 
     public Render(Character character) {
         TerminalSize[0] = Console.WindowWidth;
@@ -53,7 +53,7 @@ public class Render
     private void RefreshSections() {
         if (DataToRefresh == null) {
             Init();
-        } else {
+        } else if (Stats != null && LeftTopLeft != null) {
             bool reAddBarChart = false;
             if (DataToRefresh.Contains(RenderSections.Health)) {
                 Stats.Data[0] = new BarChartItem("Health", Character.Health, Color.Green);
@@ -71,7 +71,7 @@ public class Render
                 LeftTopLeft.Update(Stats);
             }
         }
-        if (DataToRefresh == null || DataToRefresh.Contains(RenderSections.Money)) {
+        if ((DataToRefresh == null || DataToRefresh.Contains(RenderSections.Money)) && LeftTopRight != null) {
             var coin = Align.Right(new Panel(new Text(Character.Money == 0 ? " NONE " : $" ${Character.Money} "))
                 .Header("[yellow]Money[/]")
                 .HeaderAlignment(Justify.Center)
@@ -79,7 +79,7 @@ public class Render
                 .Border(BoxBorder.Rounded));
             LeftTopRight.Update(coin);
         }
-        if (DataToRefresh == null || DataToRefresh.Contains(RenderSections.Image)) {
+        if ((DataToRefresh == null || DataToRefresh.Contains(RenderSections.Image)) && LeftBottom != null) {
             var image = new CanvasImage(Character.Image);
             image.MaxWidth(Console.WindowHeight - 4);
             LeftBottom.Update(new Panel(Align.Center(image, VerticalAlignment.Middle)).Border(BoxBorder.None));
@@ -91,6 +91,7 @@ public class Render
         if (DataToRefresh == null) {
             RefreshSections();
         }
+        if (Root == null) {return;}
         AnsiConsole.Live(Root).StartAsync(async ctx =>
         {
             while (true)
