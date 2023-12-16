@@ -1,6 +1,6 @@
 namespace BLib;
 
-enum RenderSections {
+public enum RenderSections {
     Health,
     Water,
     Food,

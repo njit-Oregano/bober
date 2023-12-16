@@ -3,7 +3,7 @@
 namespace BLib;
 public class Render
 {
-    private Character Character;
+    private Character? Character;
     private HashSet<RenderSections>? DataToRefresh;
     private int[] TerminalSize = new int[2];
     private const int bottomPadding = 4;
@@ -17,10 +17,9 @@ public class Render
     private Layout? Root;
     private BarChart? Stats;
 
-    public Render(Character character) {
+    public Render() {
         TerminalSize[0] = Console.WindowWidth;
         TerminalSize[1] = Console.WindowHeight;
-        Character = character;
     }
 
     private void Init() {
@@ -51,6 +50,7 @@ public class Render
     }
 
     private void RefreshSections() {
+        if (Character == null) {return;}
         if (DataToRefresh == null) {
             Init();
         } else if (Stats != null && LeftTopLeft != null) {
@@ -87,7 +87,8 @@ public class Render
         DataToRefresh = new HashSet<RenderSections>();
     }
 
-    public void StartRender() {
+    public void StartRender(Character character) {
+        Character = character;
         if (DataToRefresh == null) {
             RefreshSections();
         }
@@ -97,6 +98,7 @@ public class Render
             while (true)
             {
                 await Task.Delay(100);
+                character.Health = character.Health - 1;
                 RefreshSections();
                 ctx.Refresh();
             }
@@ -109,5 +111,10 @@ public class Render
                 break;
             }
         }
+    }
+
+    public void AddDataToRefresh(RenderSections section) {
+        if (DataToRefresh == null) {return;}
+        DataToRefresh.Add(section);
     }
 }
