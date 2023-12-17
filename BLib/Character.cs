@@ -58,6 +58,26 @@ public class Character {
     }
     private string _image;
 
+    public void AddHealth(int amount = 1) {
+        Health += amount;
+    }
+    public void AddWater(int amount = 1) {
+        Water += amount;
+    }
+    public void AddFood(int amount = 1) {
+        Food += amount;
+    }
+    public void LoseHealth(int amount = 1) {
+        Health -= amount;
+    }
+    public void LoseWater(int amount = 1) {
+        Water -= amount;
+    }
+    public void LoseFood(int amount = 1) {
+        Food -= amount;
+    }
+
+    
 
     private readonly Render Render;
     public Character(int health, int water, int food, int money, string image, Render render) {
