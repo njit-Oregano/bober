@@ -105,6 +105,7 @@ public class Render
         if (Root == null) {return;}
         AnsiConsole.Live(Root).StartAsync(async ctx =>
         {
+            ctx.Refresh();
             while (true)
             {
                 await Task.Delay(100);
