@@ -49,8 +49,9 @@ public class Render
         LeftTopLeft.Update(Stats);
     }
 
-    private void RefreshSections() {
-        if (Character == null) {return;}
+    private bool RefreshSections() {
+        if (Character == null) {return false;}
+        bool refresh = false;
         if (DataToRefresh == null) {
             Init();
         } else if (Stats != null && LeftTopLeft != null) {
@@ -68,6 +69,7 @@ public class Render
                 reAddBarChart = true;
             }
             if (reAddBarChart) {
+                refresh = true;
                 LeftTopLeft.Update(Stats);
             }
         }
@@ -78,13 +80,16 @@ public class Render
                 .BorderColor(Color.Yellow)
                 .Border(BoxBorder.Rounded));
             LeftTopRight.Update(coin);
+            refresh = true;
         }
         if ((DataToRefresh == null || DataToRefresh.Contains(RenderSections.Image)) && LeftBottom != null) {
             var image = new CanvasImage(Character.Image);
             image.MaxWidth(Console.WindowHeight - 4);
             LeftBottom.Update(new Panel(Align.Center(image, VerticalAlignment.Middle)).Border(BoxBorder.None));
+            refresh = true;
         }
         DataToRefresh = new HashSet<RenderSections>();
+        return refresh;
     }
 
     public void StartRender(Character character) {
@@ -99,8 +104,9 @@ public class Render
             {
                 await Task.Delay(100);
                 character.Health = character.Health - 1;
-                RefreshSections();
-                ctx.Refresh();
+                if (RefreshSections()) {
+                    ctx.Refresh();
+                };
             }
         });
         while (true)
