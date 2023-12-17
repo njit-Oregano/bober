@@ -41,11 +41,11 @@ public class Render
         MainTable.Border(TableBorder.None);
         MainTable.Columns[1].Width = (int)Math.Floor(Console.WindowWidth * .45);
         Root = new Layout("root").Update(MainTable).Size(Console.WindowHeight - bottomPadding);
-
+        if (Character == null) {return;}
         Stats = new BarChart()
-            .AddItem("Health", 100, Color.Green)
-            .AddItem("Water", 100, Color.Blue)
-            .AddItem("Food", 100, Color.SandyBrown)
+            .AddItem("Health", Character.Health, Color.Green)
+            .AddItem("Water", Character.Water, Color.Blue)
+            .AddItem("Food", Character.Food, Color.SandyBrown)
             .WithMaxValue(100);
         LeftTopLeft.Update(Stats);
     }
@@ -108,7 +108,7 @@ public class Render
             ctx.Refresh();
             while (true)
             {
-                await Task.Delay(100);
+                await Task.Delay(4000);
                 character.Tick();
                 if (RefreshSections()) {
                     ctx.Refresh();

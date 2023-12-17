@@ -1,5 +1,6 @@
 BApp/obj/
 BApp/bin/
+BApp/progress.json
 BLib/obj/
 BLib/bin/
 BTest/obj/

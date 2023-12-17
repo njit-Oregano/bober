@@ -4,3 +4,5 @@ using BLib;
 Render renderer = new Render();
 Character character = new Character(100, 100, 100, 100, "test.png", renderer);
 renderer.StartRender(character);
+
+AppDomain.CurrentDomain.ProcessExit += new EventHandler(character.SaveProgress);
