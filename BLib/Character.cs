@@ -77,7 +77,25 @@ public class Character {
         Food -= amount;
     }
 
-    
+    private int _internalTick = 0; // 1 tick = 100ms
+    private int _waterTick = 300; 
+    private int _foodTick = 500;
+
+    public void Tick() {
+        int productOfTicks = _waterTick * _foodTick;
+        _internalTick = (_internalTick + 1) % productOfTicks;
+        
+        if (_internalTick % _waterTick == 0) {
+            LoseWater();
+        }
+        if (_internalTick % _foodTick == 0) {
+            LoseFood();
+        }
+        if (Food == 0 || Water == 0) {
+            LoseHealth();
+        }
+        
+    }
 
     private readonly Render Render;
     public Character(int health, int water, int food, int money, string image, Render render) {

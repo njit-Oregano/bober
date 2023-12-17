@@ -108,7 +108,7 @@ public class Render
             while (true)
             {
                 await Task.Delay(100);
-                character.Health = character.Health - 1;
+                character.Tick();
                 if (RefreshSections()) {
                     ctx.Refresh();
                 };
