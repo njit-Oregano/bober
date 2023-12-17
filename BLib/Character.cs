@@ -4,16 +4,16 @@ public class Character {
     public int Health {
         get { return _health; }
         set {
-            _health = value;
+            _health = Math.Clamp(value, 0, 100);
             Render.AddDataToRefresh(RenderSections.Health);
         }
     }
     private int _health;
 
-        public int Water {
+    public int Water {
         get { return _water; }
         set {
-            _water = value;
+            _water = Math.Clamp(value, 0, 100);
             Render.AddDataToRefresh(RenderSections.Water);
         }
     }
@@ -22,7 +22,7 @@ public class Character {
     public int Food {
         get { return _food; }
         set {
-            _food = value;
+            _food = Math.Clamp(value, 0, 100);
             Render.AddDataToRefresh(RenderSections.Food);
         }
     }
@@ -31,7 +31,7 @@ public class Character {
     public int Money {
         get { return _money; }
         set {
-            _money = value;
+            _money = Math.Clamp(value, 0, 100);
             Render.AddDataToRefresh(RenderSections.Money);
         }
     }
