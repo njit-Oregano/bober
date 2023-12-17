@@ -1,4 +1,6 @@
 namespace BLib;
+using System.Text.Json;
+
 
 public class Character {
     public bool Dead {
@@ -77,25 +79,24 @@ public class Character {
         Food -= amount;
     }
 
-    private int _internalTick = 0; // 1 tick = 100ms
+    private int _internalTickClock = 0; // 1 tick = 100 ms
     private int _waterTick = 300; 
     private int _foodTick = 500;
 
     public void Tick() {
-        int productOfTicks = _waterTick * _foodTick;
-        _internalTick = (_internalTick + 1) % productOfTicks;
+        _internalTickClock = (_internalTickClock + 1) % 1500;
         
-        if (_internalTick % _waterTick == 0) {
+        if (_internalTickClock % _waterTick == 0) {
             LoseWater();
         }
-        if (_internalTick % _foodTick == 0) {
+        if (_internalTickClock % _foodTick == 0) {
             LoseFood();
         }
         if (Food == 0 || Water == 0) {
             LoseHealth();
         }
-        
     }
+
 
     private readonly Render Render;
     public Character(int health, int water, int food, int money, string image, Render render) {
