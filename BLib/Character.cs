@@ -27,6 +27,7 @@ public class Character {
         get { return _water; }
         set {
             _water = Math.Clamp(value, 0, 100);
+            if (_water == 0) LoseHealth(-value);
             Render.AddDataToRefresh(RenderSections.Water);
         }
     }
@@ -36,6 +37,7 @@ public class Character {
         get { return _food; }
         set {
             _food = Math.Clamp(value, 0, 100);
+            if (_food == 0) LoseHealth(-value);
             Render.AddDataToRefresh(RenderSections.Food);
         }
     }
@@ -90,9 +92,6 @@ public class Character {
         }
         if (_internalTickClock % _foodTick == 0) {
             LoseFood();
-        }
-        if (Food == 0 || Water == 0) {
-            LoseHealth();
         }
     }
 
