@@ -1,4 +1,5 @@
-﻿using Spectre.Console;
+﻿using SixLabors.ImageSharp.Processing;
+using Spectre.Console;
 
 namespace BLib;
 public class Render
@@ -82,9 +83,13 @@ public class Render
             LeftTopRight.Update(coin);
             refresh = true;
         }
-        if ((DataToRefresh == null || DataToRefresh.Contains(RenderSections.Image)) && LeftBottom != null) {
+        if ((DataToRefresh == null || DataToRefresh.Contains(RenderSections.Image) || DataToRefresh.Contains(RenderSections.Dead)) && LeftBottom != null) {
             var image = new CanvasImage(Character.Image);
             image.MaxWidth(Console.WindowHeight - 4);
+            if (Character.Dead) {
+                image.BilinearResampler();
+                image.Mutate(ctx => ctx.Grayscale());
+            }
             LeftBottom.Update(new Panel(Align.Center(image, VerticalAlignment.Middle)).Border(BoxBorder.None));
             refresh = true;
         }

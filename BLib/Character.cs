@@ -1,10 +1,22 @@
 namespace BLib;
 
 public class Character {
+    public bool Dead {
+        get { return _dead; }
+        set {
+            _dead = value;
+            Render.AddDataToRefresh(RenderSections.Dead);
+        }
+    }
+    private bool _dead;
+
     public int Health {
         get { return _health; }
         set {
             _health = Math.Clamp(value, 0, 100);
+            if (_health == 0) {
+                Dead = true;
+            }
             Render.AddDataToRefresh(RenderSections.Health);
         }
     }

@@ -5,5 +5,6 @@ public enum RenderSections {
     Water,
     Food,
     Money,
-    Image
+    Image,
+    Dead
 }
