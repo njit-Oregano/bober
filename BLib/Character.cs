@@ -46,7 +46,7 @@ public class Character {
     public int Money {
         get { return _money; }
         set {
-            _money = Math.Clamp(value, 0, 100);
+            _money = Math.Clamp(value, 0, 999);
             Render.AddDataToRefresh(RenderSections.Money);
         }
     }
