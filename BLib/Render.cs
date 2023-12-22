@@ -19,6 +19,7 @@ public class Render
     private Layout? Root;
     private BarChart? Stats;
     private Dictionary<PossibleRightRenderables, IRightRenderable> RightRenderables = new Dictionary<PossibleRightRenderables, IRightRenderable>();
+    private SwitchingMenu SwitchingMenu = new SwitchingMenu();
     private PossibleRightRenderables RightToRender;
 
     public Render() {
@@ -38,7 +39,7 @@ public class Render
         Left = new Layout("Left").SplitRows(LeftTop, LeftBottom);
         Right = new Layout("Right");
         RightToRender = PossibleRightRenderables.Fridge;
-        Right.SplitRows(RightRenderables[RightToRender].rendered, new Layout());
+        Right.SplitRows(RightRenderables[RightToRender].rendered, SwitchingMenu.rendered);
         MainTable.AddRow(Left, Right);
         MainTable.HideHeaders();
         MainTable.Border(TableBorder.None);
@@ -122,6 +123,15 @@ public class Render
         while (true)
         {
             var key = Console.ReadKey(true);
+            if (key.Key == ConsoleKey.UpArrow || key.Key == ConsoleKey.DownArrow || key.Key == ConsoleKey.LeftArrow || key.Key == ConsoleKey.RightArrow || key.Key == ConsoleKey.Enter) {
+                if (!RightRenderables[RightToRender].HandleInput(key))
+                {
+
+                } else
+                {
+                    SwitchingMenu.HandleInput(key);
+                }
+            }
             if (key.Key == ConsoleKey.Escape)
             {
                 break;
