@@ -33,17 +33,18 @@ public class SwitchingMenu : IRightRenderable
 
     public bool HandleInput(ConsoleKeyInfo keyInfo)
     {
-        if (keyInfo.Key == ConsoleKey.UpArrow)
+        switch (keyInfo.Key)
         {
-            ChangeSelecteds(false, false);
-        }
-        else if (keyInfo.Key == ConsoleKey.LeftArrow || keyInfo.Key == ConsoleKey.DownArrow)
-        {
-            ChangeSelecteds(true, false);
-        }
-        else if (keyInfo.Key == ConsoleKey.RightArrow)
-        {
-            ChangeSelecteds(false, true);
+            case ConsoleKey.UpArrow:
+                ChangeSelecteds(false, false);
+                break;
+            case ConsoleKey.LeftArrow:
+            case ConsoleKey.DownArrow:
+                ChangeSelecteds(true, false);
+                break;
+            case ConsoleKey.RightArrow:
+                ChangeSelecteds(false, true);
+                break;
         }
         return true;
     }
