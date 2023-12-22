@@ -6,7 +6,8 @@ public class Render
 {
     private Character? Character;
     private HashSet<RenderSections>? DataToRefresh;
-    private int[] TerminalSize = new int[2];
+    public static readonly int[] TerminalSize = new int[2] { Console.WindowWidth, Console.WindowHeight };
+    public static readonly int RightColumnWidth = (int)Math.Floor(Render.TerminalSize[0] * .45);
     private const int bottomPadding = 4;
     private Table? MainTable;
     private Layout? LeftTopLeft;
@@ -19,8 +20,6 @@ public class Render
     private BarChart? Stats;
 
     public Render() {
-        TerminalSize[0] = Console.WindowWidth;
-        TerminalSize[1] = Console.WindowHeight;
     }
 
     private void Init() {
@@ -39,7 +38,7 @@ public class Render
         MainTable.AddRow(Left, Right);
         MainTable.HideHeaders();
         MainTable.Border(TableBorder.None);
-        MainTable.Columns[1].Width = (int)Math.Floor(Console.WindowWidth * .45);
+        MainTable.Columns[1].Width = RightColumnWidth;
         Root = new Layout("root").Update(MainTable).Size(Console.WindowHeight - bottomPadding);
         if (Character == null) {return;}
         Stats = new BarChart()
