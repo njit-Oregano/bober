@@ -5,7 +5,7 @@ namespace BLib;
 public class Render
 {
     private Character? Character;
-    private HashSet<RenderSections>? DataToRefresh;
+    private static HashSet<RenderSections>? DataToRefresh;
     public static readonly int[] TerminalSize = new int[2] { Console.WindowWidth, Console.WindowHeight };
     public static readonly int RightColumnWidth = (int)Math.Floor(Render.TerminalSize[0] * .45);
     private const int bottomPadding = 4;
@@ -97,6 +97,9 @@ public class Render
             LeftBottom.Update(new Panel(Align.Center(image, VerticalAlignment.Middle)).Border(BoxBorder.None));
             refresh = true;
         }
+        if (DataToRefresh == null || DataToRefresh.Contains(RenderSections.Right)) {
+            refresh = true;
+        }
         DataToRefresh = new HashSet<RenderSections>();
         return refresh;
     }
@@ -142,5 +145,10 @@ public class Render
     public void AddDataToRefresh(RenderSections section) {
         if (DataToRefresh == null) {return;}
         DataToRefresh.Add(section);
+    }
+
+    public static void RightWasUpdated() {
+        if (DataToRefresh == null) {return;}
+        DataToRefresh.Add(RenderSections.Right);
     }
 }

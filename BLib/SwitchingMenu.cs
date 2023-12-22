@@ -29,16 +29,21 @@ public class SwitchingMenu: IRightRenderable {
 
     public bool HandleInput(ConsoleKeyInfo keyInfo) {
         if (keyInfo.Key == ConsoleKey.UpArrow) {
-            fridge.selected = false;
-            games.selected = false;
+            ChangeSelecteds(false, false);
         } else if (keyInfo.Key == ConsoleKey.LeftArrow || keyInfo.Key == ConsoleKey.DownArrow) {
-            fridge.selected = true;
-            games.selected = false;
+            ChangeSelecteds(true, false);
         } else if (keyInfo.Key == ConsoleKey.RightArrow) {
-            fridge.selected = false;
-            games.selected = true;
+            ChangeSelecteds(false, true);
         }
         return true;
+    }
+
+    public void ChangeSelecteds(bool fridge, bool games) {
+        if (this.fridge.selected != fridge || this.games.selected != games) {
+            Render.RightWasUpdated();
+        }
+        this.fridge.selected = fridge;
+        this.games.selected = games;
     }
 
 }

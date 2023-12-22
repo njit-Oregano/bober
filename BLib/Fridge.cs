@@ -122,6 +122,7 @@ public class Fridge: IRightRenderable {
     }
 
     private void SelectItem(int x, int y) {
+        Render.RightWasUpdated();
         if (x == -1 && y == -1) {
             ItemRows[CurrentSelected[1]][CurrentSelected[0]].selected = false;
             CurrentSelected = new int[2] { x, y };
