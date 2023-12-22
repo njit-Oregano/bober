@@ -35,7 +35,7 @@ public class Fridge : IRightRenderable
         new("Pineapple", ":pineapple:", 1, false, 1),
         new("Mango", ":mango:", 1, false, 1),
         new("Corn", ":ear_of_corn:", 1, false, 1)
-    };
+    }; 
     private Layout MainLayout;
     private Table FridgeTable;
     private Panel AlertPanel;
@@ -82,8 +82,9 @@ public class Fridge : IRightRenderable
         MainLayout = new Layout();
         Layout tableLayout = new Layout().Update(Align.Center(FridgeTable, VerticalAlignment.Middle));
         AlertPanel = CreateAlertPanel("");
-        AlertLayout = new Layout().Update(AlertPanel).Size(3).Invisible();
-        HideHelperLayout = new Layout().Update(new Panel("").Border(BoxBorder.None).Expand()).Size(3);
+        int alertHeight = 4;
+        AlertLayout = new Layout().Update(AlertPanel).Size(alertHeight).Invisible();
+        HideHelperLayout = new Layout().Update(new Panel("").Border(BoxBorder.None).Expand()).Size(alertHeight);
         MainLayout.SplitRows(new Layout().Update(tableLayout), AlertLayout, HideHelperLayout);
     }
 
