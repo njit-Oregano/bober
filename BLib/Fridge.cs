@@ -75,20 +75,62 @@ public class Fridge: IRightRenderable {
 
     private bool HandleRightArrow()
     {
+        if (CurrentSelected[0] == -1 && CurrentSelected[1] == -1) {
+            return true;
+        }
+        if (CurrentSelected[0] < ItemRows[CurrentSelected[1]].Count - 1) {
+            SelectItem(CurrentSelected[0] + 1, CurrentSelected[1]);
+            return false;
+        }
         return false;
     }
 
     private bool HandleLeftArrow()
     {
+        if (CurrentSelected[0] == -1 && CurrentSelected[1] == -1) {
+            return true;
+        }
+        if (CurrentSelected[0] > 0) {
+            SelectItem(CurrentSelected[0] - 1, CurrentSelected[1]);
+            return false;
+        }
         return false;
     }
 
     private bool HandleDownArrow()
     {
+        if (CurrentSelected[0] == -1 && CurrentSelected[1] == -1) {
+            return true;
+        }
+        if (CurrentSelected[1] == ItemRows.Count - 1 || CurrentSelected[0] > ItemRows[CurrentSelected[1]+1].Count - 1) {
+            SelectItem(-1, -1);
+            return true;
+        }
+        SelectItem(CurrentSelected[0], CurrentSelected[1] + 1);
         return false;
     }
 
-    private bool HandleUpArrow() {  
+    private bool HandleUpArrow() {
+        if (CurrentSelected[0] == -1 && CurrentSelected[1] == -1) {
+            SelectItem(0, 0);
+            return true;
+        } else if (CurrentSelected[1] == 0) {
+            return false;
+        }
+        SelectItem(CurrentSelected[0], CurrentSelected[1] - 1);      
         return true;
+    }
+
+    private void SelectItem(int x, int y) {
+        if (x == -1 && y == -1) {
+            ItemRows[CurrentSelected[1]][CurrentSelected[0]].selected = false;
+            CurrentSelected = new int[2] { x, y };
+            return;
+        }
+        if (CurrentSelected[0] != -1 && CurrentSelected[1] != -1) {
+            ItemRows[CurrentSelected[1]][CurrentSelected[0]].selected = false;
+        }
+        ItemRows[y][x].selected = true;
+        CurrentSelected = new int[2] { x, y };
     }
 }
