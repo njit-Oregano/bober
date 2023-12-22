@@ -109,6 +109,23 @@ public class Fridge : IRightRenderable
 
     private bool HandleEnter()
     {
+        if (CurrentSelected[0] == -1 && CurrentSelected[1] == -1)
+        {
+            return true;
+        }
+        FridgeItemStruct fridgeItem = Items[CurrentSelected[1] * ColumnCount + CurrentSelected[0]];
+        if (Character.Money >= fridgeItem.Price && fridgeItem.Drinkable ? Character.Water < 100 : Character.Food < 100)
+        {
+            Character.Money -= fridgeItem.Price;
+            if (fridgeItem.Drinkable)
+            {
+                Character.Water += fridgeItem.Points;
+            }
+            else
+            {
+                Character.Food += fridgeItem.Points;
+            }
+        }
         return false;
     }
 
