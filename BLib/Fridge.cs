@@ -34,14 +34,13 @@ public class Fridge : IRightRenderable
         new("Watermelon", ":watermelon:", 1, false, 1),
         new("Pineapple", ":pineapple:", 1, false, 1),
         new("Mango", ":mango:", 1, false, 1),
-        new("Corn", ":ear_of_corn:", 1, false, 1),
-
+        new("Corn", ":ear_of_corn:", 1, false, 1)
     };
     private Layout MainLayout;
     private Table FridgeTable;
     private List<List<SelectableItem>> ItemRows = new List<List<SelectableItem>>();
     private int[] CurrentSelected = new int[2] { -1, -1 };
-    private int MaxColumns = 9;
+    private static readonly int ColumnCount = Math.Min((Render.RightColumnWidth - 2) / 7, 9);
     public Layout rendered
     {
         get
@@ -54,18 +53,18 @@ public class Fridge : IRightRenderable
     {
         Character = character;
         FridgeTable = new Table();
-        for (int i = 0; i < MaxColumns; i++)
+        for (int i = 0; i < ColumnCount; i++)
         {
             FridgeTable.AddColumn("");
         }
-        int maxRow = (int)Math.Ceiling((double)Items.Count / MaxColumns);
-        for (int i = 0; i < maxRow; i++)
+        int rowCount = (int)Math.Ceiling((double)Items.Count / ColumnCount);
+        for (int i = 0; i < rowCount; i++)
         {
             List<Table> rows = new List<Table>();
             List<SelectableItem> itemRow = new List<SelectableItem>();
-            for (int l = 0; l < MaxColumns; l++)
+            for (int l = 0; l < ColumnCount; l++)
             {
-                int index = (i * maxRow) + l;
+                int index = (i * ColumnCount) + l;
                 if (index >= Items.Count) { break; }
                 FridgeItemStruct fridgeItem = Items[index];
                 SelectableItem item = new SelectableItem(fridgeItem.Name, fridgeItem.Emoji, true);
