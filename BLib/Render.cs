@@ -18,6 +18,8 @@ public class Render
     private Layout? Right;
     private Layout? Root;
     private BarChart? Stats;
+    private Dictionary<PossibleRightRenderables, IRightRenderable> RightRenderables = new Dictionary<PossibleRightRenderables, IRightRenderable>();
+    private PossibleRightRenderables RightToRender;
 
     public Render() {
     }
@@ -35,6 +37,8 @@ public class Render
         LeftTop.SplitColumns(LeftTopLeft, LeftTopRight);
         Left = new Layout("Left").SplitRows(LeftTop, LeftBottom);
         Right = new Layout("Right");
+        RightToRender = PossibleRightRenderables.Fridge;
+        Right.SplitRows(RightRenderables[RightToRender].rendered, new Layout());
         MainTable.AddRow(Left, Right);
         MainTable.HideHeaders();
         MainTable.Border(TableBorder.None);
@@ -96,7 +100,8 @@ public class Render
         return refresh;
     }
 
-    public void StartRender(Character character) {
+    public void StartRender(Character character, Fridge fridge) {
+        RightRenderables.Add(PossibleRightRenderables.Fridge, fridge);
         Character = character;
         if (DataToRefresh == null) {
             RefreshSections();
