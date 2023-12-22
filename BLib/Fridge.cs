@@ -38,6 +38,9 @@ public class Fridge : IRightRenderable
     };
     private Layout MainLayout;
     private Table FridgeTable;
+    private Panel AlertPanel;
+    private Layout AlertLayout;
+    private Layout HideHelperLayout;
     private List<List<SelectableItem>> ItemRows = new List<List<SelectableItem>>();
     private int[] CurrentSelected = new int[2] { -1, -1 };
     private static readonly int ColumnCount = Math.Min((Render.RightColumnWidth - 2) / 7, 9);
@@ -76,7 +79,12 @@ public class Fridge : IRightRenderable
         }
         FridgeTable.HideHeaders();
         FridgeTable.Border(TableBorder.None);
-        MainLayout = new Layout().Update(Align.Center(FridgeTable, VerticalAlignment.Middle));
+        MainLayout = new Layout();
+        Layout tableLayout = new Layout().Update(Align.Center(FridgeTable, VerticalAlignment.Middle));
+        AlertPanel = new Panel("Heló!").Expand();
+        AlertLayout = new Layout().Update(AlertPanel).Size(3).Invisible();
+        HideHelperLayout = new Layout().Update(new Panel("").Border(BoxBorder.None).Expand()).Size(3);
+        MainLayout.SplitRows(new Layout().Update(tableLayout), AlertLayout, HideHelperLayout);
     }
 
     public bool HandleInput(ConsoleKeyInfo keyInfo)
@@ -168,7 +176,12 @@ public class Fridge : IRightRenderable
         {
             ItemRows[CurrentSelected[1]][CurrentSelected[0]].selected = false;
             CurrentSelected = new int[2] { x, y };
+            AlertLayout.Invisible();
+            HideHelperLayout.Visible();
             return;
+        } else if (!AlertLayout.IsVisible) {
+            AlertLayout.Visible();
+            HideHelperLayout.Invisible();
         }
         if (CurrentSelected[0] != -1 && CurrentSelected[1] != -1)
         {
