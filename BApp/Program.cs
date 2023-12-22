@@ -3,6 +3,6 @@ using BLib;
 
 Render renderer = new Render();
 Character character = new Character(100, 100, 100, 100, "test.png", renderer);
-Fridge fridge = new Fridge();
+Fridge fridge = new Fridge(character);
 renderer.StartRender(character, fridge);
 AppDomain.CurrentDomain.ProcessExit += new EventHandler(character.SaveProgress);
