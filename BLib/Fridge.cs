@@ -5,21 +5,43 @@ namespace BLib;
 
 public class Fridge : IRightRenderable
 {
-    private Dictionary<string, string> Items = new Dictionary<string, string>() {
-        {"Apple", ":red_apple:"},
-        {"Pizza", ":pizza:"},
-        {"Hamburger", ":hamburger:"},
-        {"HotDog", ":hot_dog:"},
-        {"Carrot", ":carrot:"},
-        {"Milk", ":glass_of_milk:"},
-        {"Wine", ":wine_glass:"},
-        {"Tea", ":teacup_without_handle:"}
+    private List<FridgeItemStruct> Items = new List<FridgeItemStruct>() {
+        new("Milk", ":glass_of_milk:", 1, true, 1),
+        new("Water", ":droplet:", 1, true, 1),
+        new("Beer", ":beer_mug:", 2, true, 2),
+        new("Wine", ":wine_glass:", 2, true, 2),
+        new("Soda", ":cup_with_straw:", 1, true, 1),
+        new("Coffee", ":hot_beverage:", 1, true, 1),
+        new("Tea", ":teacup_without_handle:", 1, true, 1),
+        new("Cocktail", ":cocktail_glass:", 2, true, 2),
+        new("Juice", ":beverage_box:", 1, true, 1),
+
+        new("Hamburger", ":hamburger:", 1, false, 1),
+        new("Pizza", ":pizza:", 1, false, 1),
+        new("Hot Dog", ":hot_dog:", 1, false, 1),
+        new("Taco", ":taco:", 1, false, 1),
+        new("Burrito", ":burrito:", 1, false, 1),
+        new("Fries", ":french_fries:", 1, false, 1),
+        new("Pancakes", ":pancakes:", 1, false, 1),
+        new("Waffles", ":waffle:", 1, false, 1),
+        new("Bacon", ":bacon:", 1, false, 1),
+
+        new("Apple", ":red_apple:", 1, false, 1),
+        new("Banana", ":banana:", 1, false, 1),
+        new("Strawberry", ":strawberry:", 1, false, 1),
+        new("Cherries", ":cherries:", 1, false, 1),
+        new("Grapes", ":grapes:", 1, false, 1),
+        new("Watermelon", ":watermelon:", 1, false, 1),
+        new("Pineapple", ":pineapple:", 1, false, 1),
+        new("Mango", ":mango:", 1, false, 1),
+        new("Corn", ":ear_of_corn:", 1, false, 1),
+
     };
     private Layout MainLayout;
     private Table FridgeTable;
     private List<List<SelectableItem>> ItemRows = new List<List<SelectableItem>>();
     private int[] CurrentSelected = new int[2] { -1, -1 };
-    private int MaxColumns = 3;
+    private int MaxColumns = 9;
     public Layout rendered
     {
         get
@@ -36,17 +58,17 @@ public class Fridge : IRightRenderable
         {
             FridgeTable.AddColumn("");
         }
-        int itemsPerRow = (int)Math.Ceiling((double)Items.Count / MaxColumns);
-        for (int i = 0; i < MaxColumns; i++)
+        int maxRow = (int)Math.Ceiling((double)Items.Count / MaxColumns);
+        for (int i = 0; i < maxRow; i++)
         {
             List<Table> rows = new List<Table>();
             List<SelectableItem> itemRow = new List<SelectableItem>();
-            for (int l = 0; l < itemsPerRow; l++)
+            for (int l = 0; l < MaxColumns; l++)
             {
-                int index = (i * itemsPerRow) + l;
+                int index = (i * maxRow) + l;
                 if (index >= Items.Count) { break; }
-                string key = Items.Keys.ElementAt(index);
-                SelectableItem item = new SelectableItem(key, Items[key], true);
+                FridgeItemStruct fridgeItem = Items[index];
+                SelectableItem item = new SelectableItem(fridgeItem.Name, fridgeItem.Emoji, true);
                 itemRow.Add(item);
                 rows.Add(item.rendered);
             }
