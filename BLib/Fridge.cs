@@ -81,7 +81,7 @@ public class Fridge : IRightRenderable
         FridgeTable.Border(TableBorder.None);
         MainLayout = new Layout();
         Layout tableLayout = new Layout().Update(Align.Center(FridgeTable, VerticalAlignment.Middle));
-        AlertPanel = new Panel("Heló!").Expand();
+        AlertPanel = CreateAlertPanel("");
         AlertLayout = new Layout().Update(AlertPanel).Size(3).Invisible();
         HideHelperLayout = new Layout().Update(new Panel("").Border(BoxBorder.None).Expand()).Size(3);
         MainLayout.SplitRows(new Layout().Update(tableLayout), AlertLayout, HideHelperLayout);
@@ -189,7 +189,11 @@ public class Fridge : IRightRenderable
         }
         ItemRows[y][x].selected = true;
         CurrentSelected = new int[2] { x, y };
-        AlertPanel = new Panel(Items[y * ColumnCount + x].ToString(Character)).Expand();
+        AlertPanel = CreateAlertPanel(Items[y * ColumnCount + x].ToString(Character));
         AlertLayout.Update(AlertPanel);
+    }
+
+    private Panel CreateAlertPanel(string text) {
+        return new Panel(text).Expand();
     }
 }
