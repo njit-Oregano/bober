@@ -39,8 +39,13 @@ public class SwitchingMenu : IRightRenderable
                 ChangeSelecteds(false, false);
                 break;
             case ConsoleKey.LeftArrow:
-            case ConsoleKey.DownArrow:
                 ChangeSelecteds(true, false);
+                break;
+            case ConsoleKey.DownArrow:
+                if (!fridge.selected && !games.selected)
+                {
+                    ChangeSelecteds(true, false);
+                }
                 break;
             case ConsoleKey.RightArrow:
                 ChangeSelecteds(false, true);
