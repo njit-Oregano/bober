@@ -7,7 +7,7 @@ public class Fridge : IRightRenderable
 {
     private List<FridgeItemStruct> Items = new List<FridgeItemStruct>() {
         new("Milk", ":glass_of_milk:", 1, true, 1),
-        new("Water", ":droplet:", 1, true, 1),
+        new("Water", ":droplet:", 10000, true, 1),
         new("Beer", ":beer_mug:", 2, true, 2),
         new("Wine", ":wine_glass:", 2, true, 2),
         new("Soda", ":cup_with_straw:", 1, true, 1),
