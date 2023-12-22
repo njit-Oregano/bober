@@ -22,11 +22,13 @@ public class Render
     private SwitchingMenu SwitchingMenu = new SwitchingMenu();
     private PossibleRightRenderables RightToRender;
 
-    public Render() {
+    public Render()
+    {
     }
 
-    private void Init() {
-        if (DataToRefresh != null) {return;}
+    private void Init()
+    {
+        if (DataToRefresh != null) { return; }
         MainTable = new Table();
         MainTable.AddColumn(new TableColumn("Left"));
         MainTable.AddColumn(new TableColumn("Right"));
@@ -45,7 +47,7 @@ public class Render
         MainTable.Border(TableBorder.None);
         MainTable.Columns[1].Width = RightColumnWidth;
         Root = new Layout("root").Update(MainTable).Size(Console.WindowHeight - bottomPadding);
-        if (Character == null) {return;}
+        if (Character == null) { return; }
         Stats = new BarChart()
             .AddItem("Health", Character.Health, Color.Green)
             .AddItem("Water", Character.Water, Color.Blue)
@@ -54,31 +56,40 @@ public class Render
         LeftTopLeft.Update(Stats);
     }
 
-    private bool RefreshSections() {
-        if (Character == null) {return false;}
+    private bool RefreshSections()
+    {
+        if (Character == null) { return false; }
         bool refresh = false;
-        if (DataToRefresh == null) {
+        if (DataToRefresh == null)
+        {
             Init();
-        } else if (Stats != null && LeftTopLeft != null) {
+        }
+        else if (Stats != null && LeftTopLeft != null)
+        {
             bool reAddBarChart = false;
-            if (DataToRefresh.Contains(RenderSections.Health)) {
+            if (DataToRefresh.Contains(RenderSections.Health))
+            {
                 Stats.Data[0] = new BarChartItem("Health", Character.Health, Color.Green);
                 reAddBarChart = true;
             }
-            if (DataToRefresh.Contains(RenderSections.Water)) {
+            if (DataToRefresh.Contains(RenderSections.Water))
+            {
                 Stats.Data[1] = new BarChartItem("Water", Character.Water, Color.Blue);
                 reAddBarChart = true;
             }
-            if (DataToRefresh.Contains(RenderSections.Food)) {
+            if (DataToRefresh.Contains(RenderSections.Food))
+            {
                 Stats.Data[2] = new BarChartItem("Food", Character.Food, Color.SandyBrown);
                 reAddBarChart = true;
             }
-            if (reAddBarChart) {
+            if (reAddBarChart)
+            {
                 refresh = true;
                 LeftTopLeft.Update(Stats);
             }
         }
-        if ((DataToRefresh == null || DataToRefresh.Contains(RenderSections.Money)) && LeftTopRight != null) {
+        if ((DataToRefresh == null || DataToRefresh.Contains(RenderSections.Money)) && LeftTopRight != null)
+        {
             var coin = Align.Right(new Panel(new Text(Character.Money == 0 ? " NONE " : $" ${Character.Money} "))
                 .Header("[yellow]Money[/]")
                 .HeaderAlignment(Justify.Center)
@@ -87,30 +98,35 @@ public class Render
             LeftTopRight.Update(coin);
             refresh = true;
         }
-        if ((DataToRefresh == null || DataToRefresh.Contains(RenderSections.Image) || DataToRefresh.Contains(RenderSections.Dead)) && LeftBottom != null) {
+        if ((DataToRefresh == null || DataToRefresh.Contains(RenderSections.Image) || DataToRefresh.Contains(RenderSections.Dead)) && LeftBottom != null)
+        {
             var image = new CanvasImage(Character.Image);
             image.MaxWidth(Console.WindowHeight - 4);
-            if (Character.Dead) {
+            if (Character.Dead)
+            {
                 image.BilinearResampler();
                 image.Mutate(ctx => ctx.Grayscale());
             }
             LeftBottom.Update(new Panel(Align.Center(image, VerticalAlignment.Middle)).Border(BoxBorder.None));
             refresh = true;
         }
-        if (DataToRefresh == null || DataToRefresh.Contains(RenderSections.Right)) {
+        if (DataToRefresh == null || DataToRefresh.Contains(RenderSections.Right))
+        {
             refresh = true;
         }
         DataToRefresh = new HashSet<RenderSections>();
         return refresh;
     }
 
-    public void StartRender(Character character, Fridge fridge) {
+    public void StartRender(Character character, Fridge fridge)
+    {
         RightRenderables.Add(PossibleRightRenderables.Fridge, fridge);
         Character = character;
-        if (DataToRefresh == null) {
+        if (DataToRefresh == null)
+        {
             RefreshSections();
         }
-        if (Root == null) {return;}
+        if (Root == null) { return; }
         AnsiConsole.Live(Root).StartAsync(async ctx =>
         {
             ctx.Refresh();
@@ -118,7 +134,8 @@ public class Render
             {
                 await Task.Delay(100);
                 character.Tick();
-                if (RefreshSections()) {
+                if (RefreshSections())
+                {
                     ctx.Refresh();
                 };
             }
@@ -126,11 +143,13 @@ public class Render
         while (true)
         {
             var key = Console.ReadKey(true);
-            if (key.Key == ConsoleKey.UpArrow || key.Key == ConsoleKey.DownArrow || key.Key == ConsoleKey.LeftArrow || key.Key == ConsoleKey.RightArrow || key.Key == ConsoleKey.Enter) {
+            if (key.Key == ConsoleKey.UpArrow || key.Key == ConsoleKey.DownArrow || key.Key == ConsoleKey.LeftArrow || key.Key == ConsoleKey.RightArrow || key.Key == ConsoleKey.Enter)
+            {
                 if (!RightRenderables[RightToRender].HandleInput(key))
                 {
 
-                } else
+                }
+                else
                 {
                     SwitchingMenu.HandleInput(key);
                 }
@@ -142,13 +161,15 @@ public class Render
         }
     }
 
-    public void AddDataToRefresh(RenderSections section) {
-        if (DataToRefresh == null) {return;}
+    public void AddDataToRefresh(RenderSections section)
+    {
+        if (DataToRefresh == null) { return; }
         DataToRefresh.Add(section);
     }
 
-    public static void RightWasUpdated() {
-        if (DataToRefresh == null) {return;}
+    public static void RightWasUpdated()
+    {
+        if (DataToRefresh == null) { return; }
         DataToRefresh.Add(RenderSections.Right);
     }
 }
