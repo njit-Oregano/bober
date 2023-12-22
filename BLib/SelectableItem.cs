@@ -11,6 +11,13 @@ public class SelectableItem {
         get { return _selected;}
         set {
             _selected = value;
+            if (value) {
+                rendered.UpdateCell(0, 0, new Markup($"[bold underline]{VisibleValue}[/]"));
+                rendered.Border(TableBorder.Heavy);
+            } else {
+                rendered.UpdateCell(0, 0, new Markup($"{VisibleValue}"));
+                rendered.Border(TableBorder.Rounded);
+            }
         }
     }
     public SelectableItem(string value, string visibleValue, bool isEmoji = false) {
