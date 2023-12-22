@@ -17,4 +17,7 @@ public struct FridgeItemStruct
     public bool Drinkable;
     public int Points;
 
+    public string ToString(Character character) {
+        return Name;
+    }
 }

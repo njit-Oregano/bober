@@ -189,5 +189,7 @@ public class Fridge : IRightRenderable
         }
         ItemRows[y][x].selected = true;
         CurrentSelected = new int[2] { x, y };
+        AlertPanel = new Panel(Items[y * ColumnCount + x].ToString(Character)).Expand();
+        AlertLayout.Update(AlertPanel);
     }
 }
