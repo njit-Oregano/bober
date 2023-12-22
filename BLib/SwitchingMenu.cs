@@ -28,6 +28,16 @@ public class SwitchingMenu: IRightRenderable {
     }
 
     public bool HandleInput(ConsoleKeyInfo keyInfo) {
+        if (keyInfo.Key == ConsoleKey.UpArrow) {
+            fridge.selected = false;
+            games.selected = false;
+        } else if (keyInfo.Key == ConsoleKey.LeftArrow || keyInfo.Key == ConsoleKey.DownArrow) {
+            fridge.selected = true;
+            games.selected = false;
+        } else if (keyInfo.Key == ConsoleKey.RightArrow) {
+            fridge.selected = false;
+            games.selected = true;
+        }
         return true;
     }
 
