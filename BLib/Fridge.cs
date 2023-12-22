@@ -194,6 +194,6 @@ public class Fridge : IRightRenderable
     }
 
     private Panel CreateAlertPanel(string text) {
-        return new Panel(text).Expand();
+        return new Panel(text).Border(BoxBorder.Heavy).Expand();
     }
 }
