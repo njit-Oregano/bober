@@ -4,11 +4,43 @@ using System.Text.Json;
 public class Character
 {
     private int _maxAge;
+    public int MaxAge 
+    {
+        get { return _maxAge; }
+        set { _maxAge = value; }
+    }
     private int _adultAge;
+    public int AdultAge
+    {
+        get{ return _adultAge; }
+        set{ _adultAge = value; }
+    }
     private int _oldAge;
+    public int OldAge 
+    { 
+        get { return _oldAge; }
+        set { _oldAge = value;}
+    }
     public int Age
     {
         get { return _age; }
+        set
+        {
+            _age = value;
+            if (_age <= _adultAge)
+            {
+                Image = "../assets/young/young1.png";
+            }
+            else if (_age <= _oldAge )
+            {
+                Image = "../assets/adult/adult1.png";
+            }
+            else if (_age <= _maxAge)
+            {
+                Image = "../assets/old/old1.png";
+            }
+            Render.AddDataToRefresh(RenderSections.Image);
+        }
     }
     public int _age;
 
@@ -142,9 +174,9 @@ public class Character
             Health,
             Money,
             Age,
-            _maxAge,
-            _oldAge,
-            _adultAge,
+            MaxAge,
+            OldAge,
+            AdultAge,
             _internalTickClock,
             CurrentTime = currentTime
         };
@@ -155,6 +187,7 @@ public class Character
     private readonly Render Render;
     public Character(int health, int water, int food, int money, Render render)
     {
+        Random random = new Random();
         Render = render;
         if (File.Exists("progress.json"))
         {
@@ -171,20 +204,19 @@ public class Character
                 Food = int.Parse(progress["Food"].ToString() ?? "0") - (ticksToAdd + ticks) / _foodTick;
                 Money = int.Parse(progress["Money"].ToString() ?? "0");
                 Age = int.Parse(progress["Age"].ToString() ?? "0");
-                _maxAge = int.Parse(progress["_maxAge"].ToString() ?? "0");
-                _oldAge = int.Parse(progress["_oldAge"].ToString() ?? "0");
-                _adultAge = int.Parse(progress["_adultAge"].ToString() ?? "0");
+                MaxAge = int.Parse(progress["MaxAge"].ToString() ?? "0");
+                OldAge = int.Parse(progress["OldAge"].ToString() ?? "0");
+                AdultAge = int.Parse(progress["AdultAge"].ToString() ?? "0");
                 return;
             }
         }
-        _image = "src";
+        Age = 0;
+        _maxAge = random.Next(15, 18);
+        _oldAge = random.Next(9, 13);
+        _adultAge = random.Next(4, 7);
         _health = health;
         _water = water;
         _food = food;
         _money = money;
-        _age = 0;
-        _maxAge = new Random().Next(15, 18);
-        _oldAge = new Random().Next(9, 13);
-        _adultAge = new Random().Next(4, 7);
     }
 }
