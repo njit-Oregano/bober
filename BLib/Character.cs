@@ -109,6 +109,7 @@ public class Character
     private int _internalTickClock = 0; // 1 tick = 100 ms
     private int _waterTick = 300;
     private int _foodTick = 500;
+    private int _ageTick = 3000;
 
     public void Tick()
     {
@@ -121,6 +122,10 @@ public class Character
         if (_internalTickClock % _foodTick == 0)
         {
             LoseFood();
+        }
+        if (_internalTickClock % _ageTick == 0)
+        {
+            _age++;
         }
     }
 
