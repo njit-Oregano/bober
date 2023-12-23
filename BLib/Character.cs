@@ -153,9 +153,8 @@ public class Character
         File.WriteAllText("progress.json", json);
     }
     private readonly Render Render;
-    public Character(int health, int water, int food, int money, string image, Render render)
+    public Character(int health, int water, int food, int money, Render render)
     {
-        _image = image;
         Render = render;
         if (File.Exists("progress.json"))
         {
@@ -178,6 +177,7 @@ public class Character
                 return;
             }
         }
+        _image = "src";
         _health = health;
         _water = water;
         _food = food;
