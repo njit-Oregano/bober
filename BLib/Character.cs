@@ -3,6 +3,12 @@ using System.Text.Json;
 
 public class Character
 {
+    public int Age
+    {
+        get { return _age; }
+    }
+    public int _age;
+
     public bool Dead
     {
         get { return _dead; }
@@ -127,6 +133,7 @@ public class Character
             Water,
             Health,
             Money,
+            Age,
             _internalTickClock,
             CurrentTime = currentTime
         };
@@ -153,9 +160,11 @@ public class Character
                 Water = int.Parse(progress["Water"].ToString() ?? "0") - (ticksToAdd + ticks) / _waterTick;
                 Food = int.Parse(progress["Food"].ToString() ?? "0") - (ticksToAdd + ticks) / _foodTick;
                 Money = int.Parse(progress["Money"].ToString() ?? "0");
+                Age = int.Parse(progress["Age"].ToString() ?? "0");
                 return;
             }
         }
+        _age = 0;
         _health = health;
         _water = water;
         _food = food;
