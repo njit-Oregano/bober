@@ -3,6 +3,9 @@ using System.Text.Json;
 
 public class Character
 {
+    private int _maxAge;
+    private int _adultAge;
+    private int _oldAge;
     public int Age
     {
         get { return _age; }
@@ -139,6 +142,9 @@ public class Character
             Health,
             Money,
             Age,
+            _maxAge,
+            _oldAge,
+            _adultAge,
             _internalTickClock,
             CurrentTime = currentTime
         };
@@ -166,13 +172,19 @@ public class Character
                 Food = int.Parse(progress["Food"].ToString() ?? "0") - (ticksToAdd + ticks) / _foodTick;
                 Money = int.Parse(progress["Money"].ToString() ?? "0");
                 Age = int.Parse(progress["Age"].ToString() ?? "0");
+                _maxAge = int.Parse(progress["_maxAge"].ToString() ?? "0");
+                _oldAge = int.Parse(progress["_oldAge"].ToString() ?? "0");
+                _adultAge = int.Parse(progress["_adultAge"].ToString() ?? "0");
                 return;
             }
         }
-        _age = 0;
         _health = health;
         _water = water;
         _food = food;
         _money = money;
+        _age = 0;
+        _maxAge = new Random().Next(15, 18);
+        _oldAge = new Random().Next(9, 13);
+        _adultAge = new Random().Next(4, 7);
     }
 }
