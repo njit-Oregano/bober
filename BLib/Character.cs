@@ -3,24 +3,27 @@ using System.Text.Json;
 
 public class Character
 {
-    private int _maxAge;
     public int MaxAge 
     {
         get { return _maxAge; }
-        set { _maxAge = value; }
+        set {  _maxAge = value; }
     }
-    private int _adultAge;
+    public int _maxAge;
+
     public int AdultAge
     {
         get{ return _adultAge; }
         set{ _adultAge = value; }
     }
-    private int _oldAge;
+    public int _adultAge;
+    
     public int OldAge 
     { 
         get { return _oldAge; }
-        set { _oldAge = value;}
+        set { _oldAge = value; }
     }
+    public int _oldAge;
+    
     public int Age
     {
         get { return _age; }
@@ -203,10 +206,10 @@ public class Character
                 Water = int.Parse(progress["Water"].ToString() ?? "0") - (ticksToAdd + ticks) / _waterTick;
                 Food = int.Parse(progress["Food"].ToString() ?? "0") - (ticksToAdd + ticks) / _foodTick;
                 Money = int.Parse(progress["Money"].ToString() ?? "0");
-                Age = int.Parse(progress["Age"].ToString() ?? "0");
                 MaxAge = int.Parse(progress["MaxAge"].ToString() ?? "0");
                 OldAge = int.Parse(progress["OldAge"].ToString() ?? "0");
                 AdultAge = int.Parse(progress["AdultAge"].ToString() ?? "0");
+                Age = int.Parse(progress["Age"].ToString() ?? "0");
                 return;
             }
         }
