@@ -4,11 +4,11 @@ using System.IO;
 
 public class Character
 {
-    private int _maxAge { get; set; }
+    private int _maxAge;
 
-    private int _adultAge { get; set; }
+    private int _adultAge;
     
-    private int _oldAge { get; set; }
+    private int _oldAge;
     
     public int Age
     {
