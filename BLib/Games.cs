@@ -20,6 +20,7 @@ public class Games : IRightRenderable
         GamesTable = new Table();
         GamesTable.AddColumn("");
         GamesTable.HideHeaders();
+        GamesTable.Border(TableBorder.None);
         for (int i = 0; i < Items.Count; i++)
         {
             SelectableItem item = new SelectableItem("", Items[i]);
