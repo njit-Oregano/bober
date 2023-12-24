@@ -19,6 +19,6 @@ public struct FridgeItemStruct
 
     public string ToString(Character character) {
         string isFood = Drinkable ? "water" : "food";
-        return $"[bold underline]{Name}[/], {Price} coins, +{Points} {isFood} points" + (character.Money >= Price ? "" : " [red]NOT ENOUGH MONEY[/]");
+        return $"[bold]{Name}[/] ${Price}\n+{Points} {isFood} points" + (character.Money >= Price ? "" : " [red]NOT ENOUGH MONEY[/]");
     }
 }
