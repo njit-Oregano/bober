@@ -1,4 +1,5 @@
 public enum PossibleRightRenderables
 {
-    Fridge
+    Fridge,
+    Games
 }

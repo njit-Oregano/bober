@@ -4,5 +4,6 @@ using BLib;
 Render renderer = new Render();
 Character character = new Character(100, 100, 100, 100, renderer);
 Fridge fridge = new Fridge(character);
-renderer.StartRender(character, fridge);
+Games games = new Games();
+renderer.StartRender(character, fridge, games);
 AppDomain.CurrentDomain.ProcessExit += new EventHandler(character.SaveProgress);

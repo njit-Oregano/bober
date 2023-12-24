@@ -8,5 +8,6 @@ public enum RenderSections
     Money,
     Image,
     Dead,
-    Right
+    Right,
+    RightTop
 }

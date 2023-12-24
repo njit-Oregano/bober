@@ -16,11 +16,12 @@ public class Render
     private Layout? LeftTop;
     private Layout? Left;
     private Layout? Right;
+    private Layout? RightTop;
     private Layout? Root;
     private BarChart? Stats;
     private Dictionary<PossibleRightRenderables, IRightRenderable> RightRenderables = new Dictionary<PossibleRightRenderables, IRightRenderable>();
     private SwitchingMenu SwitchingMenu = new SwitchingMenu();
-    private PossibleRightRenderables RightToRender;
+    private static PossibleRightRenderables RightToRender;
 
     public Render()
     {
@@ -41,7 +42,9 @@ public class Render
         Left = new Layout("Left").SplitRows(LeftTop, LeftBottom);
         Right = new Layout("Right");
         RightToRender = PossibleRightRenderables.Fridge;
-        Right.SplitRows(RightRenderables[RightToRender].rendered, SwitchingMenu.rendered);
+        RightTop = new Layout("Top");
+        RightTop.Update(RightRenderables[RightToRender].rendered);
+        Right.SplitRows(RightTop, SwitchingMenu.rendered);
         MainTable.AddRow(Left, Right);
         MainTable.HideHeaders();
         MainTable.Border(TableBorder.None);
@@ -114,13 +117,19 @@ public class Render
         {
             refresh = true;
         }
+        if (DataToRefresh != null && DataToRefresh.Contains(RenderSections.RightTop))
+        {
+            RightTop?.Update(RightRenderables[RightToRender].rendered);
+            refresh = true;
+        }
         DataToRefresh = new HashSet<RenderSections>();
         return refresh;
     }
 
-    public void StartRender(Character character, Fridge fridge)
+    public void StartRender(Character character, Fridge fridge, Games games)
     {
         RightRenderables.Add(PossibleRightRenderables.Fridge, fridge);
+        RightRenderables.Add(PossibleRightRenderables.Games, games);
         Character = character;
         if (DataToRefresh == null)
         {
@@ -161,7 +170,7 @@ public class Render
         }
     }
 
-    public void AddDataToRefresh(RenderSections section)
+    public static void AddDataToRefresh(RenderSections section)
     {
         if (DataToRefresh == null) { return; }
         DataToRefresh.Add(section);
@@ -171,5 +180,11 @@ public class Render
     {
         if (DataToRefresh == null) { return; }
         DataToRefresh.Add(RenderSections.Right);
+    }
+
+    public static void SetRightToRender(PossibleRightRenderables renderable)
+    {
+        RightToRender = renderable;
+        AddDataToRefresh(RenderSections.RightTop);
     }
 }

@@ -50,6 +50,16 @@ public class SwitchingMenu : IRightRenderable
             case ConsoleKey.RightArrow:
                 ChangeSelecteds(false, true);
                 break;
+            case ConsoleKey.Enter:
+                if (fridge.selected)
+                {
+                    Render.SetRightToRender(PossibleRightRenderables.Fridge);
+                }
+                else if (games.selected)
+                {
+                    Render.SetRightToRender(PossibleRightRenderables.Games);
+                }
+                break;
         }
         return true;
     }
