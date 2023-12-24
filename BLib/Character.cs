@@ -171,7 +171,7 @@ public class Character
             MaxAge = _maxAge,
             OldAge = _oldAge,
             AdultAge = _adultAge,
-            _internalTickClock,
+            InternalTickClock = _internalTickClock,
             CurrentTime = currentTime
         };
 
@@ -191,7 +191,7 @@ public class Character
             {
                 long lastTime = long.Parse(progress["CurrentTime"].ToString() ?? "0");
                 long timeDiff = DateTimeOffset.Now.ToUnixTimeMilliseconds() - lastTime;
-                int ticks = int.Parse(progress["_internalTickClock"].ToString() ?? "0");
+                int ticks = int.Parse(progress["InternalTickClock"].ToString() ?? "0");
                 int ticksToAdd = (int)Math.Floor(timeDiff / 100.0);
                 _internalTickClock = (ticks + ticksToAdd) % 1500;
                 Health = int.Parse(progress["Health"].ToString() ?? "0");

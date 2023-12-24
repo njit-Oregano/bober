@@ -93,7 +93,20 @@ public class Render
         }
         if ((DataToRefresh == null || DataToRefresh.Contains(RenderSections.Money)) && LeftTopRight != null)
         {
-            var coin = Align.Right(new Panel(new Text(Character.Money == 0 ? " NONE " : $" ${Character.Money} "))
+            string moneyText = "";
+            if (Character.Money.ToString().Length == 1)
+            {
+                moneyText = $"   ${Character.Money}  ";
+            }
+            else if (Character.Money.ToString().Length == 2)
+            {
+                moneyText = $"  ${Character.Money}  ";
+            }
+            else if (Character.Money.ToString().Length == 3)
+            {
+                moneyText = $" ${Character.Money}  ";
+            }
+            var coin = Align.Right(new Panel(new Text(Character.Money == 0 ? "  $0   " : moneyText))
                 .Header("[yellow]Money[/]")
                 .HeaderAlignment(Justify.Center)
                 .BorderColor(Color.Yellow)
