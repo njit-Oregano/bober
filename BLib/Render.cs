@@ -8,12 +8,12 @@ public class Render
     private static HashSet<RenderSections>? DataToRefresh;
     public static readonly int[] TerminalSize = new int[2] { Console.WindowWidth, Console.WindowHeight };
     public static readonly int RightColumnWidth = (int)Math.Floor(Render.TerminalSize[0] * .45);
+    public static readonly int LeftColumnWidth = Render.TerminalSize[0] - RightColumnWidth;
     private const int bottomPadding = 4;
     private Table? MainTable;
-    private Layout? LeftTopLeft;
-    private Layout? LeftTopRight;
     private Layout? LeftBottom;
     private Layout? LeftTop;
+    private Table? LeftTopTable;
     private Layout? Left;
     private Layout? Right;
     private Layout? RightTop;
@@ -23,22 +23,45 @@ public class Render
     private SwitchingMenu SwitchingMenu = new SwitchingMenu();
     private static PossibleRightRenderables RightToRender;
 
+    private int _coinWidth = 0;
+    private int CoinWidth
+    {
+        get
+        {
+            return _coinWidth;
+        }
+        set
+        {
+            _coinWidth = value;
+            UpdateLeftTopTableColumnsWidths();
+        }
+    }
+
     public Render()
     {
     }
 
     private void Init()
     {
-        if (DataToRefresh != null) { return; }
+        if (DataToRefresh != null || Character == null) { return; }
         MainTable = new Table();
         MainTable.AddColumn(new TableColumn("Left"));
         MainTable.AddColumn(new TableColumn("Right"));
-        LeftTopLeft = new Layout("Left");
-        LeftTopRight = new Layout("Right");
         LeftBottom = new Layout("Bottom");
         LeftTop = new Layout("Top");
         LeftTop.Size(3);
-        LeftTop.SplitColumns(LeftTopLeft, LeftTopRight);
+        LeftTopTable = new Table();
+        LeftTopTable.AddColumns("", "");
+        LeftTopTable.HideHeaders();
+        LeftTopTable.Border(TableBorder.None);
+        Stats = new BarChart()
+            .AddItem("Health", Character.Health, Color.Green)
+            .AddItem("Water", Character.Water, Color.Blue)
+            .AddItem("Food", Character.Food, Color.SandyBrown)
+            .WithMaxValue(100);
+        LeftTopTable.AddRow(Stats, new Panel(""));
+        LeftTop.Update(LeftTopTable);
+        UpdateLeftTopTableColumnsWidths();
         Left = new Layout("Left").SplitRows(LeftTop, LeftBottom);
         Right = new Layout("Right");
         RightToRender = PossibleRightRenderables.Fridge;
@@ -50,13 +73,6 @@ public class Render
         MainTable.Border(TableBorder.None);
         MainTable.Columns[1].Width = RightColumnWidth;
         Root = new Layout("root").Update(MainTable).Size(Console.WindowHeight - bottomPadding);
-        if (Character == null) { return; }
-        Stats = new BarChart()
-            .AddItem("Health", Character.Health, Color.Green)
-            .AddItem("Water", Character.Water, Color.Blue)
-            .AddItem("Food", Character.Food, Color.SandyBrown)
-            .WithMaxValue(100);
-        LeftTopLeft.Update(Stats);
     }
 
     private bool RefreshSections()
@@ -67,7 +83,7 @@ public class Render
         {
             Init();
         }
-        else if (Stats != null && LeftTopLeft != null)
+        else if (Stats != null)
         {
             bool reAddBarChart = false;
             if (DataToRefresh.Contains(RenderSections.Health))
@@ -88,10 +104,9 @@ public class Render
             if (reAddBarChart)
             {
                 refresh = true;
-                LeftTopLeft.Update(Stats);
             }
         }
-        if ((DataToRefresh == null || DataToRefresh.Contains(RenderSections.Money)) && LeftTopRight != null)
+        if ((DataToRefresh == null || DataToRefresh.Contains(RenderSections.Money)) && LeftTopTable != null)
         {
             string moneyText = "";
             if (Character.Money.ToString().Length == 1)
@@ -111,7 +126,8 @@ public class Render
                 .HeaderAlignment(Justify.Center)
                 .BorderColor(Color.Yellow)
                 .Border(BoxBorder.Rounded));
-            LeftTopRight.Update(coin);
+            LeftTopTable.UpdateCell(0, 1, coin);
+            CoinWidth = moneyText.Length + 2;
             refresh = true;
         }
         if ((DataToRefresh == null || DataToRefresh.Contains(RenderSections.Image) || DataToRefresh.Contains(RenderSections.Dead)) && LeftBottom != null)
@@ -181,6 +197,14 @@ public class Render
                 break;
             }
         }
+    }
+
+    public void UpdateLeftTopTableColumnsWidths() {
+        if (LeftTopTable == null || Stats == null) { return; }
+        int gap = 4;
+        LeftTopTable.Columns[0].Width(LeftColumnWidth - CoinWidth - gap);
+        Stats.Width(LeftColumnWidth - CoinWidth - gap);
+        LeftTopTable.Columns[1].Width(CoinWidth + gap);
     }
 
     public static void AddDataToRefresh(RenderSections section)
