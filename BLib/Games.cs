@@ -34,6 +34,70 @@ public class Games : IRightRenderable
     }
 
     public bool HandleInput(ConsoleKeyInfo keyInfo) {
+        switch (keyInfo.Key)
+        {
+            case ConsoleKey.UpArrow:
+                return HandleUpArrow();
+            case ConsoleKey.DownArrow:
+                return HandleDownArrow();
+            case ConsoleKey.LeftArrow:
+            case ConsoleKey.RightArrow:
+                if (CurrentSelected != -1) {
+                    return false;
+                }
+                return true;
+            case ConsoleKey.Enter:
+                return HandleEnter();
+            default:
+                return true;
+        }
+    }
+
+    private bool HandleDownArrow() {
+        if (CurrentSelected == -1) {
+            return true;
+        }
+        if (CurrentSelected == GameItems.Count - 1) {
+            SelectItem(-1);
+            return true;
+        }
+        SelectItem(CurrentSelected + 1);
         return false;
+    }
+
+    private bool HandleUpArrow() {
+        if (CurrentSelected == -1) {
+            SelectItem(0);
+            return true;
+        }
+        if (CurrentSelected == 0) {
+            return false;
+        }
+        SelectItem(CurrentSelected - 1);
+        return true;
+    }
+
+    private bool HandleEnter()
+    {
+        if (CurrentSelected == -1)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    private void SelectItem(int index)
+    {
+        Render.RightWasUpdated();
+        if (CurrentSelected != -1)
+        {
+            GameItems[CurrentSelected].selected = false;
+        }
+        CurrentSelected = index;
+        if (index == -1)
+        {
+            return;
+        }
+        GameItems[CurrentSelected].selected = true;
     }
 }
