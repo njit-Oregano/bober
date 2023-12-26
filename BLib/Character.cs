@@ -201,7 +201,7 @@ public class Character
                 _maxAge = int.Parse(progress["MaxAge"].ToString() ?? "0");
                 _oldAge = int.Parse(progress["OldAge"].ToString() ?? "0");
                 _adultAge = int.Parse(progress["AdultAge"].ToString() ?? "0");
-                Age = int.Parse(progress["Age"].ToString() ?? "0");
+                Age = int.Parse(progress["Age"].ToString() ?? "0") + (ticksToAdd + ticks) / _ageTick;
                 return;
             }
         }
