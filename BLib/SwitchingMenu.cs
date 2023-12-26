@@ -35,9 +35,6 @@ public class SwitchingMenu : IRightRenderable
     {
         switch (keyInfo.Key)
         {
-            case ConsoleKey.UpArrow:
-                ChangeSelecteds(false, false);
-                break;
             case ConsoleKey.LeftArrow:
                 ChangeSelecteds(true, false);
                 break;
@@ -49,16 +46,6 @@ public class SwitchingMenu : IRightRenderable
                 break;
             case ConsoleKey.RightArrow:
                 ChangeSelecteds(false, true);
-                break;
-            case ConsoleKey.Enter:
-                if (fridge.selected)
-                {
-                    Render.SetRightToRender(PossibleRightRenderables.Fridge);
-                }
-                else if (games.selected)
-                {
-                    Render.SetRightToRender(PossibleRightRenderables.Games);
-                }
                 break;
         }
         return true;
@@ -72,6 +59,14 @@ public class SwitchingMenu : IRightRenderable
         }
         this.fridge.selected = fridge;
         this.games.selected = games;
+        if (fridge)
+        {
+            Render.SetRightToRender(PossibleRightRenderables.Fridge);
+        }
+        else if (games)
+        {
+            Render.SetRightToRender(PossibleRightRenderables.Games);
+        }
     }
 
 }
