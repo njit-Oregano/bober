@@ -33,7 +33,13 @@ public class Game: IRightRenderable {
         for (int i = 0; i < Render.LeftColumnWidth / 2; i++) {
             MainGrid.Columns[i].Padding(0, 0, 0, 0);
         }
-        MainLayout.Update(Align.Center(MainGrid, VerticalAlignment.Middle));
+        Table wrapperTable = new Table();
+        wrapperTable.AddColumn(new TableColumn(""));
+        wrapperTable.HideHeaders();
+        wrapperTable.Border(TableBorder.DoubleEdge);
+        wrapperTable.Columns[0].PadLeft(3);
+        wrapperTable.AddRow(MainGrid);
+        MainLayout.Update(Align.Center(wrapperTable, VerticalAlignment.Middle));
     }
 
     public bool HandleInput(ConsoleKeyInfo key) {
