@@ -20,7 +20,7 @@ public class Render
     private Layout? Root;
     private BarChart? Stats;
     private Dictionary<PossibleRightRenderables, IRightRenderable> RightRenderables = new Dictionary<PossibleRightRenderables, IRightRenderable>();
-    private SwitchingMenu SwitchingMenu = new SwitchingMenu();
+    private static SwitchingMenu SwitchingMenu = new SwitchingMenu();
     private static PossibleRightRenderables RightToRender;
 
     private int _coinWidth = 0;
@@ -223,6 +223,11 @@ public class Render
     public static void SetRightToRender(PossibleRightRenderables renderable)
     {
         RightToRender = renderable;
+        if (renderable == PossibleRightRenderables.Game) {
+            SwitchingMenu.rendered.Invisible();
+        } else {
+            SwitchingMenu.rendered.Visible();
+        }
         AddDataToRefresh(RenderSections.RightTop);
     }
 }
