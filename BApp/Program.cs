@@ -5,5 +5,6 @@ Render renderer = new Render();
 Character character = new Character(100, 100, 100, 100, renderer);
 Fridge fridge = new Fridge(character);
 Games games = new Games();
-renderer.StartRender(character, fridge, games);
+Game game = new Game(character);
+renderer.StartRender(character, fridge, games, game);
 AppDomain.CurrentDomain.ProcessExit += new EventHandler(character.SaveProgress);

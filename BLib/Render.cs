@@ -155,10 +155,11 @@ public class Render
         return refresh;
     }
 
-    public void StartRender(Character character, Fridge fridge, Games games)
+    public void StartRender(Character character, Fridge fridge, Games games, Game game)
     {
         RightRenderables.Add(PossibleRightRenderables.Fridge, fridge);
         RightRenderables.Add(PossibleRightRenderables.Games, games);
+        RightRenderables.Add(PossibleRightRenderables.Game, game);
         Character = character;
         if (DataToRefresh == null)
         {

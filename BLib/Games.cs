@@ -83,6 +83,7 @@ public class Games : IRightRenderable
         {
             return true;
         }
+        Render.SetRightToRender(PossibleRightRenderables.Game);
         return false;
     }
 
