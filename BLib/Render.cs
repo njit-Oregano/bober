@@ -7,9 +7,10 @@ public class Render
     private Character? Character;
     private static HashSet<RenderSections>? DataToRefresh;
     public static readonly int[] TerminalSize = new int[2] { Console.WindowWidth, Console.WindowHeight };
+    public static readonly int Height = Console.WindowHeight - BottomPadding;
     public static readonly int RightColumnWidth = (int)Math.Floor(Render.TerminalSize[0] * .45);
     public static readonly int LeftColumnWidth = Render.TerminalSize[0] - RightColumnWidth;
-    private const int bottomPadding = 4;
+    private static readonly int BottomPadding = 4;
     private Table? MainTable;
     private Layout? LeftBottom;
     private Layout? LeftTop;
@@ -72,7 +73,7 @@ public class Render
         MainTable.HideHeaders();
         MainTable.Border(TableBorder.None);
         MainTable.Columns[1].Width = RightColumnWidth;
-        Root = new Layout("root").Update(MainTable).Size(Console.WindowHeight - bottomPadding);
+        Root = new Layout("root").Update(MainTable).Size(Height);
     }
 
     private bool RefreshSections()
