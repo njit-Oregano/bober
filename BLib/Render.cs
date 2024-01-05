@@ -174,6 +174,11 @@ public class Render
             {
                 await Task.Delay(100);
                 character.Tick();
+                bool gameNeedsRefresh = false;
+                if (RightToRender == PossibleRightRenderables.Game)
+                {
+                    gameNeedsRefresh = game.GameTick();
+                }
                 if (RefreshSections())
                 {
                     ctx.Refresh();
