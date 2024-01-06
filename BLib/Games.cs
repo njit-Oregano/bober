@@ -10,13 +10,15 @@ public class Games : IRightRenderable
     private Table GamesTable;
     private List<SelectableItem> GameItems = new List<SelectableItem>();
     private Layout MainLayout;
+    private Game Game;
     public Layout rendered {
         get {
             return MainLayout;
         }
     }
-    public Games()
+    public Games(Game game)
     {
+        Game = game;
         GamesTable = new Table();
         GamesTable.AddColumn("");
         GamesTable.HideHeaders();
