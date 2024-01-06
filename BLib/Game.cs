@@ -46,7 +46,6 @@ public class Game: IRightRenderable {
         WrapperTable.HideHeaders();
         WrapperTable.Border(TableBorder.DoubleEdge);
         WrapperTable.Columns[0].PadLeft(2);
-        WrapperTable.Columns[0].Width(Width * 2 + 1);
         WrapperTable.AddRow(MainGrid);
         MainLayout.Update(Align.Center(WrapperTable, VerticalAlignment.Middle));
     }
