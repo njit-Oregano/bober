@@ -4,7 +4,9 @@ using Spectre.Console;
 public class Game: IRightRenderable {
     public static readonly int Height = Render.Height / 2;
     public static readonly int Width = Render.LeftColumnWidth / 3;
+    private static readonly string BackgroundEmoji = ":black_large_square:";
     public static PossibleGames CurrentGame;
+
     private int[]? PlayerPosition;
     private Layout MainLayout;
     private Table WrapperTable;
@@ -18,10 +20,17 @@ public class Game: IRightRenderable {
     private readonly Character Character;
     private bool GameIsOver = false;
 
-    private static readonly string GameOverText = "Game Over";
-    private static readonly int GameOverTextLength = GameOverText.Length;
-    private static readonly int GameOverTextStart = Width / 2 - GameOverTextLength / 2;
-    private static readonly int GameOverTextEnd = GameOverTextStart + GameOverTextLength;
+    private readonly string GameOverText = "Game Over";
+    private int GameOverTextStart {
+        get {
+            return Width / 2 - GameOverText.Length / 2;
+        }
+    }
+    private int GameOverTextEnd {
+        get {
+            return GameOverTextStart + GameOverText.Length;
+        }
+    }
     public Game(Character character) {
         Character = character;
         MainLayout = new Layout();
@@ -30,7 +39,7 @@ public class Game: IRightRenderable {
         MainGrid.Border(TableBorder.None);
         List<string> row = new List<string>();
         for (int i = 0; i < Width; i++) {
-            row.Add("0");
+            row.Add(BackgroundEmoji);
         }
         MainGrid.AddColumns(row.ToArray());
         MainGrid.HideHeaders();
@@ -39,13 +48,11 @@ public class Game: IRightRenderable {
         }
         for (int i = 0; i < Width; i++) {
             MainGrid.Columns[i].Padding(0, 0, 0, 0);
-            MainGrid.Columns[i].PadRight(1);
         }
         WrapperTable = new Table();
         WrapperTable.AddColumn(new TableColumn(""));
         WrapperTable.HideHeaders();
         WrapperTable.Border(TableBorder.DoubleEdge);
-        WrapperTable.Columns[0].PadLeft(2);
         WrapperTable.AddRow(MainGrid);
         MainLayout.Update(Align.Center(WrapperTable, VerticalAlignment.Middle));
     }
@@ -56,10 +63,12 @@ public class Game: IRightRenderable {
 
     public bool GameTick() {
         if (PlayerPosition == null) {
-            SetPlayerPosition(0, 0);
+            if (CurrentGame == PossibleGames.River) {
+                SetPlayerPosition(Width / 2, Height - 1);
+            }
             return true;
         }
-        GameOver();
+        // GameOver();
         return true;
     }
 
@@ -69,15 +78,9 @@ public class Game: IRightRenderable {
         }
         bool xPositionChanged = PlayerPosition == null || PlayerPosition[0] != x;
         if (PlayerPosition != null) {
-            MainGrid.UpdateCell(PlayerPosition[0], PlayerPosition[1], "0");
+            MainGrid.UpdateCell(PlayerPosition[0], PlayerPosition[1], BackgroundEmoji);
         }
-        MainGrid.UpdateCell(x, y, ":beaver:");
-        if (xPositionChanged) {
-            if (PlayerPosition != null) {
-                MainGrid.Columns[PlayerPosition[0]].PadRight(1);
-            }
-            MainGrid.Columns[x].PadRight(0);
-        }
+        MainGrid.UpdateCell(y, x, ":beaver:");
         PlayerPosition = new int[] { x, y };
     }
 
