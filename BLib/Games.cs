@@ -86,7 +86,7 @@ public class Games : IRightRenderable
             return true;
         }
         Render.SetRightToRender(PossibleRightRenderables.Game);
-        Game.CurrentGame = (CurrentSelected == 0) ? PossibleGames.River : (CurrentSelected == 1) ? PossibleGames.Home : PossibleGames.Fly;
+        Game.SetGameType((CurrentSelected == 0) ? PossibleGames.River : (CurrentSelected == 1) ? PossibleGames.Home : PossibleGames.Fly);
         return false;
     }
 

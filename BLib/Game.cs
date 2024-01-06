@@ -2,12 +2,11 @@ using BLib;
 using Spectre.Console;
 
 public class Game: IRightRenderable {
-    public static readonly int Height = Render.Height / 2;
-    public static readonly int Width = Render.LeftColumnWidth / 3;
+    public static readonly int MaxHeight = Render.Height / 2;
+    public static readonly int MaxWidth = Render.LeftColumnWidth / 3;
     private static readonly string BackgroundEmoji = ":black_large_square:";
-    public static PossibleGames CurrentGame;
+    private PossibleGames CurrentGame;
 
-    private int[]? PlayerPosition;
     private Layout MainLayout;
     private Table WrapperTable;
     private Table MainGrid;
@@ -18,6 +17,14 @@ public class Game: IRightRenderable {
     }
 
     private readonly Character Character;
+    private int[]? PlayerPosition;
+    private int Width;
+    private int Height;
+    private Dictionary<PossibleGames, int[]> GameAspectRatios = new Dictionary<PossibleGames, int[]>() {
+        { PossibleGames.River, new int[]{4, 3} },
+        { PossibleGames.Home, new int[]{16, 9} },
+        { PossibleGames.Fly, new int[]{9, 16} }
+    };
     private bool GameIsOver = false;
 
     private readonly string GameOverText = "Game Over";
@@ -34,6 +41,35 @@ public class Game: IRightRenderable {
     public Game(Character character) {
         Character = character;
         MainLayout = new Layout();
+        MainGrid = new Table();
+        WrapperTable = new Table();
+    }
+
+    public bool HandleInput(ConsoleKeyInfo key) {
+        return false;
+    }
+
+    public bool GameTick() {
+        // GameOver();
+        return true;
+    }
+
+    public void SetGameType(PossibleGames game) {
+        PlayerPosition = null;
+        int[] aspectRatio = GameAspectRatios[game];
+        CalculateWidthAndHeight(aspectRatio[0], aspectRatio[1], out Width, out Height);
+        InitGrid();
+        CurrentGame = game;
+        InitPlayerPosition();
+    }
+
+    private void InitPlayerPosition() {
+        if (CurrentGame == PossibleGames.River) {
+            SetPlayerPosition(Width / 2, Height - 1);
+        }
+    }
+
+    private void InitGrid() {
         MainLayout.Size(Height);
         MainGrid = new Table();
         MainGrid.Border(TableBorder.None);
@@ -57,26 +93,35 @@ public class Game: IRightRenderable {
         MainLayout.Update(Align.Center(WrapperTable, VerticalAlignment.Middle));
     }
 
-    public bool HandleInput(ConsoleKeyInfo key) {
-        return false;
-    }
+    private void CalculateWidthAndHeight(int aspectRatioWidth, int aspectRatioHeight, out int width, out int height)
+    {
 
-    public bool GameTick() {
-        if (PlayerPosition == null) {
-            if (CurrentGame == PossibleGames.River) {
-                SetPlayerPosition(Width / 2, Height - 1);
+        if (aspectRatioWidth > aspectRatioHeight)
+        {
+            width = MaxWidth;
+            height = (int)Math.Round((double)MaxWidth / aspectRatioWidth * aspectRatioHeight);
+            if (height > MaxHeight)
+            {
+                height = MaxHeight;
+                width = (int)Math.Round((double)MaxHeight / aspectRatioHeight * aspectRatioWidth);
             }
-            return true;
         }
-        // GameOver();
-        return true;
+        else
+        {
+            height = MaxHeight;
+            width = (int)Math.Round((double)MaxHeight / aspectRatioHeight * aspectRatioWidth);
+            if (width > MaxWidth)
+            {
+                width = MaxWidth;
+                height = (int)Math.Round((double)MaxWidth / aspectRatioWidth * aspectRatioHeight);
+            }
+        }
     }
 
     private void SetPlayerPosition(int x, int y) {
         if (x < 0 || x >= Width || y < 0 || y >= Height) {
             return;
         }
-        bool xPositionChanged = PlayerPosition == null || PlayerPosition[0] != x;
         if (PlayerPosition != null) {
             MainGrid.UpdateCell(PlayerPosition[0], PlayerPosition[1], BackgroundEmoji);
         }
