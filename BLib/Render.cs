@@ -179,7 +179,7 @@ public class Render
                 {
                     gameNeedsRefresh = game.GameTick();
                 }
-                if (RefreshSections())
+                if (RefreshSections() || gameNeedsRefresh)
                 {
                     ctx.Refresh();
                 };
