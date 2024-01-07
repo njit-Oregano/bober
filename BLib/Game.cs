@@ -212,7 +212,7 @@ public class Game: IRightRenderable {
 
     private void CheckAndMaybePlaceBarriers()
     {
-       switch (CurrentGame) {
+        switch (CurrentGame) {
             case PossibleGames.River:
                 if (Barriers.Count < 1)
                 {
@@ -227,6 +227,9 @@ public class Game: IRightRenderable {
             case PossibleGames.Home:
                 break;
             case PossibleGames.Fly:
+                if (Barriers.Count < 1) {
+                    Barriers.Add(new GameBarrier(this, Width - 1, 0, 5));
+                }
                 break;
         }
     }

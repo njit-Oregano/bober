@@ -30,6 +30,25 @@ class GameBarrier {
                         }
                     }
                 }
+            } else if (Game.CurrentGame == PossibleGames.Fly) {
+                if (_Position < Game.Width - 1) {
+                    for (int i = 0; i < Game.Height; i++) {
+                        if (i < HoleStart || i > HoleEnd) {
+                            Game.SetGridCell(_Position + 1, i);
+                        }
+                    }
+                }
+                if (value < -1) {
+                    Game.RemoveBarrier(Position);
+                } else {
+                    for (int i = 0; i < Game.Height; i++) {
+                        if (i < HoleStart || i > HoleEnd) {
+                            Game.SetGridCell(_Position, i, BarrierEmoji);
+                        } else if (_Position != 0) {
+                            Game.SetGridCell(_Position, i);
+                        }
+                    }
+                }
             }
             CheckCollide();
             _Position = value;
@@ -42,6 +61,7 @@ class GameBarrier {
         Game = game;
         HoleStart = holeStart;
         HoleEnd = holeEnd;
+        _Position = position;
         Position = position;
     }
 
@@ -53,6 +73,8 @@ class GameBarrier {
         TickDelay = 0;
         if (Game.CurrentGame == PossibleGames.River) {
             Position++;
+        } else if (Game.CurrentGame == PossibleGames.Fly) {
+            Position--;
         }
     }
 
