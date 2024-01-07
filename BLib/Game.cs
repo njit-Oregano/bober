@@ -4,8 +4,8 @@ using Spectre.Console;
 public class Game: IRightRenderable {
     public static readonly int MaxHeight = Render.Height / 2;
     public static readonly int MaxWidth = Render.LeftColumnWidth / 3;
-    private static readonly string BackgroundEmoji = ":black_large_square:";
-    private PossibleGames CurrentGame;
+    private const string BackgroundEmoji = ":black_large_square:";
+    public PossibleGames CurrentGame;
 
     private Layout MainLayout;
     private Table WrapperTable;
@@ -18,14 +18,32 @@ public class Game: IRightRenderable {
 
     private readonly Character Character;
     private int[]? PlayerPosition;
-    private int Width;
-    private int Height;
+    private int _Width;
+    public int Width {
+        get {
+            return _Width;
+        }
+        private set {
+            _Width = value;
+        }
+    }
+    private int _Height;
+    public int Height {
+        get {
+            return _Height;
+        }
+        private set {
+            _Height = value;
+        }
+    }
     private Dictionary<PossibleGames, int[]> GameAspectRatios = new Dictionary<PossibleGames, int[]>() {
         { PossibleGames.River, new int[]{4, 3} },
         { PossibleGames.Home, new int[]{16, 9} },
         { PossibleGames.Fly, new int[]{9, 16} }
     };
     private bool GameIsOver = false;
+    private int MoneyEarned = 0;
+    private List<GameBarrier> Barriers = new List<GameBarrier>();
 
     private readonly string GameOverText = "Game Over";
     private int GameOverTextStart {
@@ -51,13 +69,17 @@ public class Game: IRightRenderable {
 
     public bool GameTick() {
         // GameOver();
+        CheckAndMaybePlaceBarriers();
+        for (int i = 0; i < Barriers.Count; i++) {
+            Barriers[i].Tick();
+        }
         return true;
     }
 
     public void SetGameType(PossibleGames game) {
         PlayerPosition = null;
         int[] aspectRatio = GameAspectRatios[game];
-        CalculateWidthAndHeight(aspectRatio[0], aspectRatio[1], out Width, out Height);
+        CalculateWidthAndHeight(aspectRatio[0], aspectRatio[1]);
         InitGrid();
         CurrentGame = game;
         InitPlayerPosition();
@@ -93,29 +115,42 @@ public class Game: IRightRenderable {
         MainLayout.Update(Align.Center(WrapperTable, VerticalAlignment.Middle));
     }
 
-    private void CalculateWidthAndHeight(int aspectRatioWidth, int aspectRatioHeight, out int width, out int height)
+    private void CalculateWidthAndHeight(int aspectRatioWidth, int aspectRatioHeight)
     {
-
         if (aspectRatioWidth > aspectRatioHeight)
         {
-            width = MaxWidth;
-            height = (int)Math.Round((double)MaxWidth / aspectRatioWidth * aspectRatioHeight);
-            if (height > MaxHeight)
+            Width = MaxWidth;
+            Height = (int)Math.Round((double)MaxWidth / aspectRatioWidth * aspectRatioHeight);
+            if (Height > MaxHeight)
             {
-                height = MaxHeight;
-                width = (int)Math.Round((double)MaxHeight / aspectRatioHeight * aspectRatioWidth);
+                Height = MaxHeight;
+                Width = (int)Math.Round((double)MaxHeight / aspectRatioHeight * aspectRatioWidth);
             }
         }
         else
         {
-            height = MaxHeight;
-            width = (int)Math.Round((double)MaxHeight / aspectRatioHeight * aspectRatioWidth);
-            if (width > MaxWidth)
+            Height = MaxHeight;
+            Width = (int)Math.Round((double)MaxHeight / aspectRatioHeight * aspectRatioWidth);
+            if (Width > MaxWidth)
             {
-                width = MaxWidth;
-                height = (int)Math.Round((double)MaxWidth / aspectRatioWidth * aspectRatioHeight);
+                Width = MaxWidth;
+                Height = (int)Math.Round((double)MaxWidth / aspectRatioWidth * aspectRatioHeight);
             }
         }
+    }
+
+    private void CheckAndMaybePlaceBarriers() {
+        if (Barriers.Count < 1) {
+            Barriers.Add(new GameBarrier(this, 0, 2, 3));
+        }
+    }
+
+    public void RemoveBarrier(int position) {
+        Barriers.RemoveAll(barrier => barrier.Position == position);
+    }
+
+    public void SetGridCell(int x, int y, string emoji = BackgroundEmoji) {
+        MainGrid.UpdateCell(y, x, emoji);
     }
 
     private void SetPlayerPosition(int x, int y) {
