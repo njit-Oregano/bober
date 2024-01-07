@@ -188,6 +188,7 @@ public class Game: IRightRenderable {
 
     public void RemoveBarrier(int position) {
         Barriers.RemoveAll(barrier => barrier.Position == position);
+        MoneyEarned++;
     }
 
     public void SetGridCell(int x, int y, string emoji = BackgroundEmoji) {

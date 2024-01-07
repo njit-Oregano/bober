@@ -11,6 +11,7 @@ class GameBarrier {
             return _Position;
         }
         private set {
+            CheckCollide(value);
             if (Game.CurrentGame == PossibleGames.River) {
                 if (_Position > 0) {
                     for (int i = 0; i < Game.Width; i++) {
@@ -29,7 +30,6 @@ class GameBarrier {
                     }
                 }
             }
-            CheckCollide();
             _Position = value;
         }
     }
@@ -54,9 +54,9 @@ class GameBarrier {
         }
     }
 
-    public void CheckCollide() {
+    public void CheckCollide(int futurePositionValue) {
         if (Game.CurrentGame == PossibleGames.River) {
-            if (Position == Game.PlayerPositionY) {
+            if (futurePositionValue == Game.PlayerPositionY) {
                 if (Game.PlayerPositionX < HoleStart || Game.PlayerPositionX > HoleEnd) {
                     Game.GameOver();
                 }
