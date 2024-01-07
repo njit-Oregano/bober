@@ -59,6 +59,7 @@ public class Game: IRightRenderable {
     };
     public bool GameIsOver = false;
     private int _TickSinceGameOver = 0;
+    private int _GravityTick = 0;
     public int TickSinceGameOver {
         get {
             return _TickSinceGameOver;
@@ -128,6 +129,13 @@ public class Game: IRightRenderable {
         for (int i = 0; i < Barriers.Count; i++) {
             Barriers[i].Tick();
         }
+        if (CurrentGame == PossibleGames.Fly) {
+            _GravityTick++;
+            if (_GravityTick >= 4) {
+                _GravityTick = 0;
+                SetPlayerPosition(PlayerPositionX, PlayerPositionY + 1);
+            }
+        }
         return true;
     }
 
@@ -149,6 +157,7 @@ public class Game: IRightRenderable {
             case PossibleGames.Home:
                 break;
             case PossibleGames.Fly:
+                SetPlayerPosition(0, Height / 2);
                 break;
         }
     }
@@ -236,6 +245,9 @@ public class Game: IRightRenderable {
                     }
                     break;
                 case ConsoleKey.UpArrow:
+                    if (CurrentGame == PossibleGames.Fly) {
+                        SetPlayerPosition(PlayerPositionX, PlayerPositionY - 1);
+                    }
                     break;
                 case ConsoleKey.DownArrow:
                     break;
