@@ -14,7 +14,9 @@ class GameBarrier {
             if (Game.CurrentGame == PossibleGames.River) {
                 if (_Position > 0) {
                     for (int i = 0; i < Game.Width; i++) {
-                        Game.SetGridCell(i, _Position - 1);
+                        if (i < HoleStart || i > HoleEnd) {
+                            Game.SetGridCell(i, _Position - 1);
+                        }
                     }
                 }
                 if (value > Game.MaxHeight) {
@@ -23,7 +25,7 @@ class GameBarrier {
                     for (int i = 0; i < Game.Width; i++) {
                         if (i < HoleStart || i > HoleEnd) {
                             Game.SetGridCell(i, _Position, BarrierEmoji);
-                        } else {
+                        } else if (_Position != Game.MaxHeight - 1) {
                             Game.SetGridCell(i, _Position);
                         }
                     }
