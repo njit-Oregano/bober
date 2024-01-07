@@ -57,12 +57,18 @@ class GameBarrier {
     }
 
     public void CheckCollide() {
-        if (Game.CurrentGame == PossibleGames.River) {
-            if (Position == Game.PlayerPositionY) {
-                if (Game.PlayerPositionX < HoleStart || Game.PlayerPositionX > HoleEnd) {
-                    Game.GameOver();
+        switch (Game.CurrentGame) {
+            case PossibleGames.River:
+                if (Position == Game.PlayerPositionY) {
+                    if (Game.PlayerPositionX < HoleStart || Game.PlayerPositionX > HoleEnd) {
+                        Game.GameOver();
+                    }
                 }
-            }
+                break;
+            case PossibleGames.Home:
+                break;
+            case PossibleGames.Fly:
+                break;
         }
     }
 }
