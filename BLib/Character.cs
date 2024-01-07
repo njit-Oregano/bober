@@ -4,6 +4,7 @@ using System.IO;
 
 public class Character
 {
+    public static readonly string Emoji = ":beaver:";
     private int _maxAge;
 
     private int _adultAge;

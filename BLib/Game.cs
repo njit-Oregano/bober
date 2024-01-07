@@ -4,7 +4,7 @@ using Spectre.Console;
 public class Game: IRightRenderable {
     public static readonly int MaxHeight = Render.Height / 2;
     public static readonly int MaxWidth = Render.LeftColumnWidth / 3;
-    private const string BackgroundEmoji = ":black_large_square:";
+    private static readonly string BackgroundEmoji = ":black_large_square:";
     public PossibleGames CurrentGame;
 
     private Layout MainLayout;
@@ -78,6 +78,7 @@ public class Game: IRightRenderable {
     }
     public int TickDelayOnBarriers;
     private List<GameBarrier> Barriers = new List<GameBarrier>();
+    private List<ConsoleKeyInfo> InputBuffer = new List<ConsoleKeyInfo>();
 
     private readonly string GameOverText = "Game Over";
     private int GameOverTextStart {
@@ -98,6 +99,7 @@ public class Game: IRightRenderable {
     }
 
     public bool HandleInput(ConsoleKeyInfo key) {
+        InputBuffer.Add(key);
         return false;
     }
 
@@ -107,6 +109,7 @@ public class Game: IRightRenderable {
             return true;
         }
         CheckAndMaybePlaceBarriers();
+        ProcessInputKeys();
         for (int i = 0; i < Barriers.Count; i++) {
             Barriers[i].Tick();
         }
@@ -193,30 +196,66 @@ public class Game: IRightRenderable {
         }
     }
 
+    private void ProcessInputKeys() {
+        foreach (ConsoleKeyInfo key in InputBuffer) {
+            switch (key.Key) {
+                case ConsoleKey.LeftArrow:
+                    if (CurrentGame == PossibleGames.River) {
+                        SetPlayerPosition(PlayerPositionX - 1, PlayerPositionY);
+                    }
+                    break;
+                case ConsoleKey.RightArrow:
+                    if (CurrentGame == PossibleGames.River) {
+                        SetPlayerPosition(PlayerPositionX + 1, PlayerPositionY);
+                    }
+                    break;
+                case ConsoleKey.UpArrow:
+                    break;
+                case ConsoleKey.DownArrow:
+                    break;
+                default:
+                    break;
+            }
+        }
+        InputBuffer.Clear();
+    }
+
     public void RemoveBarrier(int position) {
         Barriers.RemoveAll(barrier => barrier.Position == position);
         MoneyEarned++;
     }
 
-    public void SetGridCell(int x, int y, string emoji = BackgroundEmoji) {
-        MainGrid.UpdateCell(y, x, emoji);
+    public void SetGridCell(int x, int y, string text = "") {
+        if (text == "") {
+            text = BackgroundEmoji;
+        }
+        MainGrid.UpdateCell(y, x, text);
     }
 
     private void SetPlayerPosition(int x, int y) {
-        if (x < 0 || x >= Width || y < 0 || y >= Height) {
+        bool barrierIsAtFuturePosition = false;
+        if (CurrentGame == PossibleGames.River) {
+            foreach (GameBarrier barrier in Barriers) {
+                if (barrier.Position == y && (x < barrier.HoleStart || x > barrier.HoleEnd)) {
+                    barrierIsAtFuturePosition = true;
+                    break;
+                }
+            }
+        }
+        if (x < 0 || x >= Width || y < 0 || y >= Height || barrierIsAtFuturePosition) {
             return;
         }
         if (PlayerPosition != null) {
-            MainGrid.UpdateCell(PlayerPosition[0], PlayerPosition[1], BackgroundEmoji);
+            SetGridCell(PlayerPosition[0], PlayerPosition[1]);
         }
-        MainGrid.UpdateCell(y, x, ":beaver:");
+        SetGridCell(x, y, Character.Emoji);
         PlayerPosition = new int[] { x, y };
     }
 
     public void GameOver() {
         if (!GameIsOver && PlayerPosition != null) {
             for (int i = GameOverTextStart; i < GameOverTextEnd; i++) {
-                MainGrid.UpdateCell(Height / 2, i, $"[red bold]{GameOverText[i - GameOverTextStart]}[/]");
+                SetGridCell(i, Height / 2, $"[red bold]{GameOverText[i - GameOverTextStart]}[/]");
             }
         }
         GameIsOver = true;
@@ -226,7 +265,7 @@ public class Game: IRightRenderable {
                 if (j == Height / 2 && i >= GameOverTextStart && i < GameOverTextEnd) {
                     continue;
                 }
-                MainGrid.UpdateCell(j, i, randomCrackedSymbols[new Random().Next(randomCrackedSymbols.Count)]);
+                SetGridCell(i, j, randomCrackedSymbols[new Random().Next(randomCrackedSymbols.Count)]);
             }
         }
         

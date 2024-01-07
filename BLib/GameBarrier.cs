@@ -1,7 +1,7 @@
 namespace BLib;
 
 class GameBarrier {
-    private const string BarrierEmoji = ":white_large_square:";
+    public static readonly string BarrierEmoji = ":white_large_square:";
 
     private Game Game;
     private int TickDelay = 0;
