@@ -142,8 +142,14 @@ public class Game: IRightRenderable {
     }
 
     private void InitPlayerPosition() {
-        if (CurrentGame == PossibleGames.River) {
-            SetPlayerPosition(Width / 2, Height - 1);
+        switch (CurrentGame) {
+            case PossibleGames.River:
+                SetPlayerPosition(Width / 2, Height - 1);
+                break;
+            case PossibleGames.Home:
+                break;
+            case PossibleGames.Fly:
+                break;
         }
     }
 
@@ -197,17 +203,22 @@ public class Game: IRightRenderable {
 
     private void CheckAndMaybePlaceBarriers()
     {
-        if (CurrentGame == PossibleGames.River)
-        {
-            if (Barriers.Count < 1)
-            {
-                int minDistanceBetweenBarriers = TickDelayOnBarriers >= 2 ? 1 : 2;
-                int maxDistanceBetweenBarriers = TickDelayOnBarriers >= 2 ? 6 : 4;
-                int distanceBetweenBarriers = new Random().Next(minDistanceBetweenBarriers, maxDistanceBetweenBarriers);
-                int randomHoleStart = new Random().Next(0, Width - distanceBetweenBarriers);
-                int randomHoleEnd = randomHoleStart + distanceBetweenBarriers;
-                Barriers.Add(new GameBarrier(this, 0, randomHoleStart, randomHoleEnd));
-            }
+       switch (CurrentGame) {
+            case PossibleGames.River:
+                if (Barriers.Count < 1)
+                {
+                    int minDistanceBetweenBarriers = TickDelayOnBarriers >= 2 ? 1 : 2;
+                    int maxDistanceBetweenBarriers = TickDelayOnBarriers >= 2 ? 6 : 4;
+                    int distanceBetweenBarriers = new Random().Next(minDistanceBetweenBarriers, maxDistanceBetweenBarriers);
+                    int randomHoleStart = new Random().Next(0, Width - distanceBetweenBarriers);
+                    int randomHoleEnd = randomHoleStart + distanceBetweenBarriers;
+                    Barriers.Add(new GameBarrier(this, 0, randomHoleStart, randomHoleEnd));
+                }
+                break;
+            case PossibleGames.Home:
+                break;
+            case PossibleGames.Fly:
+                break;
         }
     }
 
