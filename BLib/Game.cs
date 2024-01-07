@@ -57,7 +57,21 @@ public class Game: IRightRenderable {
         { PossibleGames.Home, new int[]{16, 9} },
         { PossibleGames.Fly, new int[]{9, 16} }
     };
-    private bool GameIsOver = false;
+    public bool GameIsOver = false;
+    private int _TickSinceGameOver = 0;
+    public int TickSinceGameOver {
+        get {
+            return _TickSinceGameOver;
+        }
+        private set {
+            _TickSinceGameOver = value;
+            if (value > 20) {
+                GameIsOver = false;
+                _TickSinceGameOver = 0;
+                Render.SetRightToRender(PossibleRightRenderables.Games);
+            }
+        }
+    }
     private int _MoneyEarned = 0;
     private int MoneyEarned {
         get {
@@ -106,6 +120,7 @@ public class Game: IRightRenderable {
     public bool GameTick() {
         if (GameIsOver) {
             GameOver();
+            TickSinceGameOver++;
             return true;
         }
         CheckAndMaybePlaceBarriers();
