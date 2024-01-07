@@ -269,6 +269,7 @@ public class Game: IRightRenderable {
 
     public void GameOver() {
         if (!GameIsOver && PlayerPosition != null) {
+            Barriers.Clear();
             for (int i = GameOverTextStart; i < GameOverTextEnd; i++) {
                 SetGridCell(i, Height / 2, $"[red bold]{GameOverText[i - GameOverTextStart]}[/]");
             }
