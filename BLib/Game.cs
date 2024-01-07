@@ -199,13 +199,13 @@ public class Game: IRightRenderable {
     {
         if (CurrentGame == PossibleGames.River)
         {
-            int minDistanceBetweenBarriers = TickDelayOnBarriers >= 2 ? 1 : 2;
-            int maxDistanceBetweenBarriers = TickDelayOnBarriers >= 2 ? 6 : 4;
-            int distanceBetweenBarriers = new Random().Next(minDistanceBetweenBarriers, maxDistanceBetweenBarriers);
-            int randomHoleStart = new Random().Next(0, Width - distanceBetweenBarriers);
-            int randomHoleEnd = randomHoleStart + distanceBetweenBarriers;
             if (Barriers.Count < 1)
             {
+                int minDistanceBetweenBarriers = TickDelayOnBarriers >= 2 ? 1 : 2;
+                int maxDistanceBetweenBarriers = TickDelayOnBarriers >= 2 ? 6 : 4;
+                int distanceBetweenBarriers = new Random().Next(minDistanceBetweenBarriers, maxDistanceBetweenBarriers);
+                int randomHoleStart = new Random().Next(0, Width - distanceBetweenBarriers);
+                int randomHoleEnd = randomHoleStart + distanceBetweenBarriers;
                 Barriers.Add(new GameBarrier(this, 0, randomHoleStart, randomHoleEnd));
             }
         }
