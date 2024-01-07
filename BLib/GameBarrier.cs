@@ -4,7 +4,7 @@ class GameBarrier {
     private const string BarrierEmoji = ":white_large_square:";
 
     private Game Game;
-
+    private int TickDelay = 0;
     private int _Position;
     public int Position {
         get {
@@ -43,6 +43,11 @@ class GameBarrier {
     }
 
     public void Tick() {
+        if (TickDelay < Game.TickDelayOnBarriers) {
+            TickDelay++;
+            return;
+        }
+        TickDelay = 0;
         if (Game.CurrentGame == PossibleGames.River) {
             Position++;
         }

@@ -1,3 +1,4 @@
+using System.Security.Cryptography.X509Certificates;
 using BLib;
 using Spectre.Console;
 
@@ -18,6 +19,22 @@ public class Game: IRightRenderable {
 
     private readonly Character Character;
     private int[]? PlayerPosition;
+    public int PlayerPositionX {
+        get {
+            if (PlayerPosition == null) {
+                return 0;
+            }
+            return PlayerPosition[0];
+        }
+    }
+    public int PlayerPositionY {
+        get {
+            if (PlayerPosition == null) {
+                return 0;
+            }
+            return PlayerPosition[1];
+        }
+    }
     private int _Width;
     public int Width {
         get {
@@ -42,7 +59,27 @@ public class Game: IRightRenderable {
         { PossibleGames.Fly, new int[]{9, 16} }
     };
     private bool GameIsOver = false;
-    private int MoneyEarned = 0;
+    private int _MoneyEarned = 0;
+    private int MoneyEarned {
+        get {
+            return _MoneyEarned;
+        }
+        set {
+            if (value < 3) {
+                TickDelayOnBarriers = 4;
+            } else if (value < 6) {
+                TickDelayOnBarriers = 3;
+            } else if (value < 9) {
+                TickDelayOnBarriers = 2;
+            } else if (value < 12) {
+                TickDelayOnBarriers = 1;
+            } else {
+                TickDelayOnBarriers = 0;
+            }
+            _MoneyEarned = value;
+        }
+    }
+    public int TickDelayOnBarriers;
     private List<GameBarrier> Barriers = new List<GameBarrier>();
 
     private readonly string GameOverText = "Game Over";
@@ -68,7 +105,6 @@ public class Game: IRightRenderable {
     }
 
     public bool GameTick() {
-        // GameOver();
         CheckAndMaybePlaceBarriers();
         for (int i = 0; i < Barriers.Count; i++) {
             Barriers[i].Tick();
@@ -78,6 +114,7 @@ public class Game: IRightRenderable {
 
     public void SetGameType(PossibleGames game) {
         PlayerPosition = null;
+        MoneyEarned = 0;
         int[] aspectRatio = GameAspectRatios[game];
         CalculateWidthAndHeight(aspectRatio[0], aspectRatio[1]);
         InitGrid();
@@ -164,7 +201,7 @@ public class Game: IRightRenderable {
         PlayerPosition = new int[] { x, y };
     }
 
-    private void GameOver() {
+    public void GameOver() {
         if (!GameIsOver && PlayerPosition != null) {
             MainGrid.Columns[PlayerPosition[0]].PadRight(1);
             for (int i = GameOverTextStart; i < GameOverTextEnd; i++) {
