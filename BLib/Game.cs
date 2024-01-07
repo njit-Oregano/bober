@@ -66,12 +66,10 @@ public class Game: IRightRenderable {
         }
         set {
             if (value < 3) {
-                TickDelayOnBarriers = 4;
-            } else if (value < 6) {
                 TickDelayOnBarriers = 3;
-            } else if (value < 9) {
+            } else if (value < 6) {
                 TickDelayOnBarriers = 2;
-            } else if (value < 12) {
+            } else if (value < 9) {
                 TickDelayOnBarriers = 1;
             } else {
                 TickDelayOnBarriers = 0;
@@ -180,9 +178,19 @@ public class Game: IRightRenderable {
         }
     }
 
-    private void CheckAndMaybePlaceBarriers() {
-        if (Barriers.Count < 1) {
-            Barriers.Add(new GameBarrier(this, 0, 2, 3));
+    private void CheckAndMaybePlaceBarriers()
+    {
+        if (CurrentGame == PossibleGames.River)
+        {
+            int minDistanceBetweenBarriers = TickDelayOnBarriers >= 2 ? 1 : 2;
+            int maxDistanceBetweenBarriers = TickDelayOnBarriers >= 2 ? 6 : 4;
+            int distanceBetweenBarriers = new Random().Next(minDistanceBetweenBarriers, maxDistanceBetweenBarriers);
+            int randomHoleStart = new Random().Next(0, Width - distanceBetweenBarriers);
+            int randomHoleEnd = randomHoleStart + distanceBetweenBarriers;
+            if (Barriers.Count < 1)
+            {
+                Barriers.Add(new GameBarrier(this, 0, randomHoleStart, randomHoleEnd));
+            }
         }
     }
 
