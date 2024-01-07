@@ -105,6 +105,10 @@ public class Game: IRightRenderable {
     }
 
     public bool GameTick() {
+        if (GameIsOver) {
+            GameOver();
+            return true;
+        }
         CheckAndMaybePlaceBarriers();
         for (int i = 0; i < Barriers.Count; i++) {
             Barriers[i].Tick();
@@ -203,7 +207,6 @@ public class Game: IRightRenderable {
 
     public void GameOver() {
         if (!GameIsOver && PlayerPosition != null) {
-            MainGrid.Columns[PlayerPosition[0]].PadRight(1);
             for (int i = GameOverTextStart; i < GameOverTextEnd; i++) {
                 MainGrid.UpdateCell(Height / 2, i, $"[red bold]{GameOverText[i - GameOverTextStart]}[/]");
             }

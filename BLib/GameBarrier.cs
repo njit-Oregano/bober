@@ -29,6 +29,7 @@ class GameBarrier {
                     }
                 }
             }
+            CheckCollide();
             _Position = value;
         }
     }
@@ -50,6 +51,16 @@ class GameBarrier {
         TickDelay = 0;
         if (Game.CurrentGame == PossibleGames.River) {
             Position++;
+        }
+    }
+
+    public void CheckCollide() {
+        if (Game.CurrentGame == PossibleGames.River) {
+            if (Position == Game.PlayerPositionY) {
+                if (Game.PlayerPositionX < HoleStart || Game.PlayerPositionX > HoleEnd) {
+                    Game.GameOver();
+                }
+            }
         }
     }
 }
