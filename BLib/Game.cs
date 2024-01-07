@@ -4,7 +4,7 @@ using Spectre.Console;
 public class Game: IRightRenderable {
     public static readonly int MaxHeight = Render.Height / 2;
     public static readonly int MaxWidth = Render.LeftColumnWidth / 3;
-    private static readonly string BackgroundEmoji = ":black_large_square:";
+    private static readonly string BackgroundEmoji = ":blue_square:";
     public PossibleGames CurrentGame;
 
     private Layout MainLayout;
