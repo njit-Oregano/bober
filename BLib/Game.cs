@@ -228,7 +228,12 @@ public class Game: IRightRenderable {
                 break;
             case PossibleGames.Fly:
                 if (Barriers.Count < 1) {
-                    Barriers.Add(new GameBarrier(this, Width - 1, 0, 5));
+                    int minDistanceBetweenBarriers = TickDelayOnBarriers >= 2 ? 2 : 3;
+                    int maxDistanceBetweenBarriers = TickDelayOnBarriers >= 2 ? 6 : 5;
+                    int distanceBetweenBarriers = new Random().Next(minDistanceBetweenBarriers, maxDistanceBetweenBarriers);
+                    int randomHoleStart = new Random().Next(0, Height - distanceBetweenBarriers);
+                    int randomHoleEnd = randomHoleStart + distanceBetweenBarriers;
+                    Barriers.Add(new GameBarrier(this, Width - 1, randomHoleStart, randomHoleEnd));
                 }
                 break;
         }
