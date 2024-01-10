@@ -17,17 +17,18 @@ public class Character
         set
         {
             _age = value;
+            int randomPicIndex = new Random().Next(1, 4);
             if (_age <= _adultAge)
             {
-                Image = "../assets/young/young1.png";
+                Image = $"../assets/young{randomPicIndex}.png";
             }
             else if (_age <= _oldAge )
             {
-                Image = "../assets/adult/adult1.png";
+                Image = $"../assets/adult{randomPicIndex}.png";
             }
             else if (_age <= _maxAge)
             {
-                Image = "../assets/old/old1.png";
+                Image = $"../assets/old{randomPicIndex}.png";
             }
             Render.AddDataToRefresh(RenderSections.Image);
         }
@@ -54,6 +55,7 @@ public class Character
             if (_health == 0)
             {
                 Dead = true;
+                Image = "../assets/dead.png";
             }
             Render.AddDataToRefresh(RenderSections.Health);
         }
