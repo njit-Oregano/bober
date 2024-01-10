@@ -268,7 +268,17 @@ public class Game: IRightRenderable {
 
     public void RemoveBarrier(int position) {
         Barriers.RemoveAll(barrier => barrier.Position == position);
-        MoneyEarned++;
+        switch (CurrentGame) {
+            case PossibleGames.River:
+                MoneyEarned += 1;
+                break;
+            case PossibleGames.Home:
+                MoneyEarned += 2;
+                break;
+            case PossibleGames.Fly:
+                MoneyEarned += 3;
+                break;
+        }
     }
 
     public void SetGridCell(int x, int y, string text = "") {
