@@ -89,6 +89,7 @@ public class Game: IRightRenderable {
                 TickDelayOnBarriers = 0;
             }
             _MoneyEarned = value;
+            Character.Money += MoneyEarned;
         }
     }
     public int TickDelayOnBarriers;
@@ -311,7 +312,6 @@ public class Game: IRightRenderable {
     public void GameOver() {
         if (!GameIsOver && PlayerPosition != null) {
             Barriers.Clear();
-            Character.Money += MoneyEarned;
             for (int i = GameOverTextStart; i < GameOverTextEnd; i++) {
                 SetGridCell(i, Height / 2, $"[red bold]{GameOverText[i - GameOverTextStart]}[/]");
             }
