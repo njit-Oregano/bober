@@ -201,7 +201,12 @@ public class Render
             }
             if (key.Key == ConsoleKey.Escape)
             {
-                break;
+                if (!game.GameIsOver){
+                    game.GameOver();
+                    game.GameIsOver = true;
+                } else {
+                    break;
+                }
             }
         }
     }
