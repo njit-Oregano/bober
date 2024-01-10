@@ -201,10 +201,17 @@ public class Render
             }
             if (key.Key == ConsoleKey.Escape)
             {
-                if (!game.GameIsOver){
+                if (!game.GameIsOver)
+                {
                     game.GameOver();
                     game.GameIsOver = true;
-                } else {
+                }
+                else if (character.Dead)
+                {
+                    File.Delete("progress.json");
+                }
+                else
+                {
                     break;
                 }
             }
