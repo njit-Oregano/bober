@@ -30,6 +30,14 @@ public class Character
             {
                 Image = $"../assets/old{randomPicIndex}.png";
             }
+            if (_age > _maxAge)
+            {
+                _dead = true;
+            }
+            if (!_dead)
+            {
+                CheckHealth();
+            }
             Render.AddDataToRefresh(RenderSections.Image);
         }
     }
@@ -123,6 +131,7 @@ public class Character
     public void LoseHealth(int amount = 1)
     {
         Health -= amount;
+        CheckHealth();
     }
     public void LoseWater(int amount = 1)
     {
@@ -138,10 +147,16 @@ public class Character
     private int _foodTick = 500;
     private int _ageTick = 3000;
 
+    private void CheckHealth()
+    {
+        if (_health < 50){
+                Image = "../assets/unhealty.png";
+        }
+    }
+
     public void Tick()
     {
         _internalTickClock = (_internalTickClock + 1) % 1500;
-
         if (_internalTickClock % _waterTick == 0)
         {
             LoseWater();
