@@ -19,13 +19,13 @@ class GameBarrier {
                         }
                     }
                 }
-                if (value > Game.MaxHeight) {
+                if (value > Game.Height) {
                     Game.RemoveBarrier(Position);
                 } else {
                     for (int i = 0; i < Game.Width; i++) {
                         if (i < HoleStart || i > HoleEnd) {
                             Game.SetGridCell(i, _Position, BarrierEmoji);
-                        } else if (_Position != Game.MaxHeight - 1) {
+                        } else if (_Position != Game.Height - 1) {
                             Game.SetGridCell(i, _Position);
                         }
                     }
