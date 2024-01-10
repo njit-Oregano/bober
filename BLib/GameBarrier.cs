@@ -90,6 +90,11 @@ class GameBarrier {
             case PossibleGames.Home:
                 break;
             case PossibleGames.Fly:
+                if (Position == Game.PlayerPositionX) {
+                    if (Game.PlayerPositionY < HoleStart || Game.PlayerPositionY > HoleEnd) {
+                        Game.GameOver();
+                    }
+                }
                 break;
         }
     }
