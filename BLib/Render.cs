@@ -158,6 +158,11 @@ public class Render
 
     public void StartRender(Character character, Fridge fridge, Games games, Game game)
     {
+        AnsiConsole.Write(
+        new FigletText("Oregano: Bober's Life")
+            .Centered()
+            .Color(Color.Blue));
+        Thread.Sleep(2000);
         RightRenderables.Add(PossibleRightRenderables.Fridge, fridge);
         RightRenderables.Add(PossibleRightRenderables.Games, games);
         RightRenderables.Add(PossibleRightRenderables.Game, game);
@@ -206,10 +211,6 @@ public class Render
                     game.GameOver();
                     game.GameIsOver = true;
                 }
-                else if (character.Dead)
-                {
-                    File.Delete("progress.json");
-                }
                 else
                 {
                     break;
@@ -217,8 +218,8 @@ public class Render
             }
         }
     }
-
-    public void UpdateLeftTopTableColumnsWidths() {
+    public void UpdateLeftTopTableColumnsWidths()
+    {
         if (LeftTopTable == null || Stats == null) { return; }
         int gap = 4;
         LeftTopTable.Columns[0].Width(LeftColumnWidth - CoinWidth - gap);
@@ -241,9 +242,12 @@ public class Render
     public static void SetRightToRender(PossibleRightRenderables renderable)
     {
         RightToRender = renderable;
-        if (renderable == PossibleRightRenderables.Game) {
+        if (renderable == PossibleRightRenderables.Game)
+        {
             SwitchingMenu.rendered.Invisible();
-        } else {
+        }
+        else
+        {
             SwitchingMenu.rendered.Visible();
         }
         AddDataToRefresh(RenderSections.RightTop);

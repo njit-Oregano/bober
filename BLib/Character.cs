@@ -196,6 +196,10 @@ public class Character
         string json = JsonSerializer.Serialize(progress);
         File.WriteAllText("progress.json", json);
     }
+    public void RemoveProgress(object? sender, EventArgs e)
+    {
+        File.Delete("progress.json");
+    }
     private readonly Render Render;
     public Character(int health, int water, int food, int money, Render render)
     {
