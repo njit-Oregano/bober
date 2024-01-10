@@ -215,8 +215,8 @@ public class Character
                 long timeDiff = DateTimeOffset.Now.ToUnixTimeMilliseconds() - lastTime;
                 int ticks = int.Parse(progress["InternalTickClock"].ToString() ?? "0");
                 int ticksToAdd = (int)Math.Floor(timeDiff / 100.0);
-                _internalTickClock = (ticks + ticksToAdd) % 1500;
                 Health = int.Parse(progress["Health"].ToString() ?? "0");
+                _internalTickClock = (ticks + ticksToAdd) % 1500;
                 Water = int.Parse(progress["Water"].ToString() ?? "0") - (ticksToAdd + ticks) / _waterTick;
                 Food = int.Parse(progress["Food"].ToString() ?? "0") - (ticksToAdd + ticks) / _foodTick;
                 Money = int.Parse(progress["Money"].ToString() ?? "0");
@@ -227,11 +227,11 @@ public class Character
                 return;
             }
         }
+        _health = health;
         _maxAge = random.Next(15, 18);
         _oldAge = random.Next(9, 13);
         _adultAge = random.Next(4, 7);
         Age = 0;
-        _health = health;
         _water = water;
         _food = food;
         _money = money;
