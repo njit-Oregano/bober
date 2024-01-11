@@ -94,6 +94,15 @@ public class Character
     }
     private int _food;
 
+    public int HowMuchItemCanBeConsumed
+    {
+        get { return _howMuchItemCanBeConsumed; }
+        set
+        {
+            _howMuchItemCanBeConsumed = Math.Clamp(value, 0, 5);
+        }
+    }
+    private int _howMuchItemCanBeConsumed = 5;
     public int Money
     {
         get { return _money; }
@@ -163,6 +172,7 @@ public class Character
         }
         if (_internalTickClock % _foodTick == 0)
         {
+            HowMuchItemCanBeConsumed++;
             LoseFood();
         }
         if (_internalTickClock % _ageTick == 0)

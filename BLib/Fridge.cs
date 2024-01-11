@@ -114,9 +114,10 @@ public class Fridge : IRightRenderable
             return true;
         }
         FridgeItemStruct fridgeItem = Items[CurrentSelected[1] * ColumnCount + CurrentSelected[0]];
-        if (Character.Money >= fridgeItem.Price && fridgeItem.Drinkable ? Character.Water < 100 : Character.Food < 100)
+        if (Character.Money >= fridgeItem.Price && (fridgeItem.Drinkable ? (Character.Water < 100) : (Character.Food < 100)) && Character.HowMuchItemCanBeConsumed > 0)
         {
             Character.Money -= fridgeItem.Price;
+            Character.HowMuchItemCanBeConsumed--;
             if (fridgeItem.Drinkable)
             {
                 Character.Water += fridgeItem.Points;
