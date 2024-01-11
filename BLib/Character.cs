@@ -156,7 +156,7 @@ public class Character
 
     public void Tick()
     {
-        _internalTickClock = (_internalTickClock + 1) % 1500;
+        _internalTickClock = (_internalTickClock + 1) % 60000;
         if (_internalTickClock % _waterTick == 0)
         {
             LoseWater();
