@@ -215,7 +215,11 @@ public class Game : IRightRenderable
             if (!Jumping)
             {
                 _GravityTick++;
-                if (_GravityTick >= 6)
+                if (_GravityTick >= 30)
+                {
+                    
+                }
+                else if (_GravityTick >= 6)
                 {
                     SetPlayerPosition(PlayerPositionX, PlayerPositionY + 1);
                 }
