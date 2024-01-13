@@ -11,6 +11,15 @@ public class Games : IRightRenderable
     private List<SelectableItem> GameItems = new List<SelectableItem>();
     private Layout MainLayout;
     private Game Game;
+    public static int CharacterHealth {
+        get {
+            return health;
+        }
+        set {
+            health = value;
+        }
+    }
+    private static int health;
     public Layout rendered {
         get {
             return MainLayout;
@@ -49,7 +58,7 @@ public class Games : IRightRenderable
                 }
                 return true;
             case ConsoleKey.Enter:
-                return HandleEnter();
+                return HandleEnter(health);
             default:
                 return true;
         }
@@ -79,10 +88,13 @@ public class Games : IRightRenderable
         return true;
     }
 
-    private bool HandleEnter()
+    private bool HandleEnter(int health)
     {
         if (CurrentSelected == -1)
         {
+            return true;
+        }
+        if (health < 10){
             return true;
         }
         Render.SetRightToRender(PossibleRightRenderables.Game);
