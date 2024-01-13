@@ -17,6 +17,7 @@ public class Character
         set
         {
             _age = value;
+            Games.CharacterAge = Age;
             int randomPicIndex = new Random().Next(1, 4);
             if (_age <= _adultAge)
             {
@@ -65,6 +66,7 @@ public class Character
                 Dead = true;
                 Image = "../assets/dead.png";
             }
+            Games.CharacterHealth = Health;
             Render.AddDataToRefresh(RenderSections.Health);
         }
     }

@@ -5,12 +5,16 @@ namespace BLib;
 public class Games : IRightRenderable
 {
     private List<string> Items = new List<string>() { "Going up the river", "Get home fast", "Trying to fly" };
+    private List<string> Difficulty = new List<string>() { "Easy", "Medium", "Hard" };
     private int CurrentSelected = -1;
-
+    private Panel AlertPanel;
+    private Layout AlertLayout;
     private Table GamesTable;
+    private Layout TableLayout;
     private List<SelectableItem> GameItems = new List<SelectableItem>();
     private Layout MainLayout;
     private Game Game;
+    private static bool oldEnough = false;
     public static int CharacterHealth {
         get {
             return health;
@@ -20,6 +24,15 @@ public class Games : IRightRenderable
         }
     }
     private static int health;
+    public static int CharacterAge {
+        get {
+            return age;
+        }
+        set {
+            age = value;
+        }
+    }
+    private static int age;
     public Layout rendered {
         get {
             return MainLayout;
@@ -32,6 +45,7 @@ public class Games : IRightRenderable
         GamesTable.AddColumn("");
         GamesTable.HideHeaders();
         GamesTable.Border(TableBorder.None);
+        TableLayout = new Layout().Update(Align.Center(GamesTable, VerticalAlignment.Middle)).Size(28);
         int longestItemText = Items.Max(item => item.Length);
         GamesTable.Columns[0].Width = Math.Clamp((int)Math.Floor(Render.RightColumnWidth * .45), longestItemText, (int)Math.Floor(longestItemText * 1.2));
         for (int i = 0; i < Items.Count; i++)
@@ -40,7 +54,14 @@ public class Games : IRightRenderable
             GameItems.Add(item);
             GamesTable.AddRow(item.rendered);
         }
+        for (int i = 0; i < 3; i++)
+        {
+            GamesTable.AddEmptyRow();
+        }
         MainLayout = new Layout();
+        AlertPanel = CreateAlertPanel("");
+        AlertLayout = new Layout().Update(AlertPanel).Size(4).Invisible();
+        MainLayout.SplitRows(TableLayout,AlertLayout);
         MainLayout.Update(Align.Center(GamesTable, VerticalAlignment.Middle));
     }
 
@@ -90,11 +111,8 @@ public class Games : IRightRenderable
 
     private bool HandleEnter(int health)
     {
-        if (CurrentSelected == -1)
+        if (CurrentSelected == -1 || health <= 25 || !oldEnough)
         {
-            return true;
-        }
-        if (health < 10){
             return true;
         }
         Render.SetRightToRender(PossibleRightRenderables.Game);
@@ -112,8 +130,45 @@ public class Games : IRightRenderable
         CurrentSelected = index;
         if (index == -1)
         {
+            AlertLayout.Invisible();
             return;
         }
+        oldEnough = false;
+        switch (CurrentSelected)
+        {
+            case 0:
+                oldEnough = true;
+                break;
+            case 1:
+                if (age >= 3)
+                {
+                    oldEnough = true;
+                }
+                break;
+            case 2:
+                if (age >= 5)
+                {
+                    oldEnough = true;
+                }
+                break;
+        }
         GameItems[CurrentSelected].selected = true;
+        AlertPanel = CreateAlertPanel($"[bold]Difficulty:[/] {Difficulty[index]} {AlertMessage()}\n[bold]Reward:[/] ${index + 1} after every barrier");
+        AlertLayout.Update(AlertPanel);
+        AlertLayout.Visible();
+    }
+
+    private string AlertMessage() {
+        if (health <= 25) {
+            return "[red]BOBER IS TOO UNHEALTY[/]";
+        }
+        if (!oldEnough) {
+            return "[red]BOBER IS TOO YOUNG[/]";
+        }
+        return "";
+    }
+
+    private Panel CreateAlertPanel(string text) {
+        return new Panel(text).Border(BoxBorder.Heavy).Expand();
     }
 }

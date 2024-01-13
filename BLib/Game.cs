@@ -170,7 +170,6 @@ public class Game : IRightRenderable
 
     public bool HandleInput(ConsoleKeyInfo key)
     {
-        Games.CharacterHealth = Character.Health;
         InputBuffer.Add(key);
         return false;
     }
