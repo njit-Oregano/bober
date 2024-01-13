@@ -36,7 +36,7 @@ Az életszakaszok és ```Character``` halála véletlenszerűen legenerálódik 
   _adultAge = random.Next(4, 7);
 ```
 
-### Food/Drink
+### Élelmiszerek
 Amikor a ```Character``` éhség szintje eléri a 0-t, elkezd csökkenni az életereje.
 ```cs
 public int Food
