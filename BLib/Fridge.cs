@@ -124,6 +124,7 @@ public class Fridge : IRightRenderable
                 Character.pillsConsumed++;
                 Character.Health += fridgeItem.Points;
                 Character.IsSick = false;
+                Character.Age = Character.Age;
                 return false;
             }
             Character.HowMuchItemCanBeConsumed--;

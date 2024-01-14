@@ -89,7 +89,7 @@ public class Render
             bool reAddBarChart = false;
             if (DataToRefresh.Contains(RenderSections.Health))
             {
-                Stats.Data[0] = new BarChartItem("Health", Character.Health, Color.Green);
+                Stats.Data[0] = new BarChartItem("Health", Character.Health, Character.IsSick ? Color.Red : Color.Green);
                 reAddBarChart = true;
             }
             if (DataToRefresh.Contains(RenderSections.Water))

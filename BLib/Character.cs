@@ -64,7 +64,6 @@ public class Character
             if (_health == 0)
             {
                 Dead = true;
-                Image = "../assets/dead.png";
             }
             Games.CharacterHealth = Health;
             Render.AddDataToRefresh(RenderSections.Health);
@@ -197,7 +196,8 @@ public class Character
             if (new Random().Next(0, 100) < _getSickChance)
             {
                 IsSick = true;
-                Image = "../assets/unhealthy.png";
+                Render.AddDataToRefresh(RenderSections.Health);
+                Image = "../assets/unhealty.png";
             }
         }
         if (IsSick)
@@ -210,7 +210,7 @@ public class Character
         }
         if (pillsConsumed > 5)
         {
-            Dead = true;
+            Health = 0;
         }
 
     }
