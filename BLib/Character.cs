@@ -170,6 +170,7 @@ public class Character
         _internalTickClock = (_internalTickClock + 1) % 60000;
         if (_internalTickClock % _waterTick == 0)
         {
+            HowMuchItemCanBeConsumed++;
             LoseWater();
         }
         if (_internalTickClock % _foodTick == 0)
