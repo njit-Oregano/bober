@@ -34,7 +34,9 @@ public class Fridge : IRightRenderable
         new("Watermelon", ":watermelon:", 3, false, 2),
         new("Pineapple", ":pineapple:", 4, false, 2),
         new("Mango", ":mango:", 2, false, 1),
-        new("Corn", ":ear_of_corn:", 2, false, 1)
+        new("Corn", ":ear_of_corn:", 2, false, 1),
+    
+        new("Pill", ":pill:", 50, false, 10)
     }; 
     private Layout MainLayout;
     private Table FridgeTable;
@@ -117,6 +119,13 @@ public class Fridge : IRightRenderable
         if (Character.Money >= fridgeItem.Price && (fridgeItem.Drinkable ? (Character.Water < 100) : (Character.Food < 100)) && Character.HowMuchItemCanBeConsumed > 0)
         {
             Character.Money -= fridgeItem.Price;
+            if (fridgeItem.Name == "Pill")
+            {
+                Character.pillsConsumed++;
+                Character.Health += fridgeItem.Points;
+                Character.IsSick = false;
+                return false;
+            }
             Character.HowMuchItemCanBeConsumed--;
             if (fridgeItem.Drinkable)
             {

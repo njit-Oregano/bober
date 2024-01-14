@@ -8,9 +8,9 @@ public class Character
     private int _maxAge;
 
     private int _adultAge;
-    
+
     private int _oldAge;
-    
+
     public int Age
     {
         get { return _age; }
@@ -23,7 +23,7 @@ public class Character
             {
                 Image = $"../assets/young{randomPicIndex}.png";
             }
-            else if (_age <= _oldAge )
+            else if (_age <= _oldAge)
             {
                 Image = $"../assets/adult{randomPicIndex}.png";
             }
@@ -153,6 +153,10 @@ public class Character
         Food -= amount;
     }
 
+    public bool IsSick { get; set; }
+    private double _getSickChance = 1; // 1% chance every 10 second
+    public int pillsConsumed { get; set; }
+
     private int _internalTickClock = 0; // 1 tick = 100 ms
     private int _waterTick = 300;
     private int _foodTick = 500;
@@ -160,8 +164,9 @@ public class Character
 
     private void CheckHealth()
     {
-        if (_health < 50){
-                Image = "../assets/unhealty.png";
+        if (_health < 50)
+        {
+            Image = "../assets/unhealty.png";
         }
     }
 
@@ -187,6 +192,27 @@ public class Character
             }
             _age++;
         }
+        if (!IsSick && _internalTickClock % 100 == 0)
+        {
+            if (new Random().Next(0, 100) < _getSickChance)
+            {
+                IsSick = true;
+                Image = "../assets/unhealthy.png";
+            }
+        }
+        if (IsSick)
+        {
+            if (_internalTickClock % 500 == 0)
+            {
+                pillsConsumed = 0;
+                LoseHealth(2);
+            }
+        }
+        if (pillsConsumed > 5)
+        {
+            Dead = true;
+        }
+
     }
 
     public void SaveProgress(object? sender, EventArgs e)

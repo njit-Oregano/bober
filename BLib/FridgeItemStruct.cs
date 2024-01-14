@@ -17,9 +17,15 @@ public struct FridgeItemStruct
     public bool Drinkable;
     public int Points;
 
-    public string ToString(Character character) {
+    public string ToString(Character character)
+    {
+        if (Name == "Pill")
+        {
+            return $"[bold]{Name}[/] ${Price}\n+{Points} health points, cures sickness"
+            + (character.Money >= Price ? "" : " [red]NOT ENOUGH MONEY[/]");
+        }
         string isFood = Drinkable ? "water" : "food";
-        return $"[bold]{Name}[/] ${Price}\n+{Points} {isFood} points" 
+        return $"[bold]{Name}[/] ${Price}\n+{Points} {isFood} points"
         + (character.Money >= Price ? "" : " [red]NOT ENOUGH MONEY[/]")
         + (character.HowMuchItemCanBeConsumed == 0 ? " [red]Bober is full[/]" : "");
     }
