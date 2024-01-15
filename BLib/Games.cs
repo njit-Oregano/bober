@@ -45,7 +45,7 @@ public class Games : IRightRenderable
         GamesTable.AddColumn("");
         GamesTable.HideHeaders();
         GamesTable.Border(TableBorder.None);
-        TableLayout = new Layout().Update(Align.Center(GamesTable, VerticalAlignment.Middle)).Size(28);
+        TableLayout = new Layout().Update(Align.Center(GamesTable, VerticalAlignment.Middle)).Size(Console.WindowHeight - 7);
         int longestItemText = Items.Max(item => item.Length);
         GamesTable.Columns[0].Width = Math.Clamp((int)Math.Floor(Render.RightColumnWidth * .45), longestItemText, (int)Math.Floor(longestItemText * 1.2));
         for (int i = 0; i < Items.Count; i++)
